@@ -21,6 +21,32 @@
       .run-discovery-btn:hover {
           color: #000; /* Cambia el color del texto al pasar el cursor (opcional) */
       }
+
+      .btn {
+        background-color: transparent;
+        height: 50px;
+        width: 200px;
+        color: black;
+        font-size: 1.5em;
+        
+    }
+
+
+
+    </style>
+    <style>
+        table {
+            table-layout: fixed;
+            width: 100%;
+        }
+        table th, table td {
+            width: 33%; /* O ajusta este valor como prefieras */
+            text-align: left;
+            overflow:auto;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
     </style>
 </head>
 <body class="w3-light-grey">
@@ -46,7 +72,7 @@
             <h5>Menu</h5>
         </div>
         <div class="w3-bar-block">
-            <a href="/" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-users fa-fw"></i>&nbsp; Overview</a>
+            <a href="/" class="w3-bar-item w3-button w3-padding "><i class="fa fa-users fa-fw"></i>&nbsp; Overview</a>
             <a href="gattering_information" class="w3-bar-item w3-button w3-padding"><i class="fa fa-eye fa-fw"></i>&nbsp; Gathering information</a>
             <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>&nbsp; Traffic Analyze</a>
             <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bullseye fa-fw"></i>&nbsp; Domain Analyze</a>
@@ -69,49 +95,41 @@
             <div class="w3-quarter">
                 <div class="w3-container w3-red w3-padding-16">
                     <div class="w3-left">
-                      
-                    </div>
-                    <div class="w3-right">
-                    </div>
-                    <div class="w3-clear"></div>
-                    <h4>
-                      <a href="#" class="run-discovery-btn">RUN DISCOVERY</a>
-                    </h4>
+                        <form action="/load_data" method="POST">
+                            <button id="loadDataBtn" class="btn">Start Scanning</button>
+                        </form>
                 </div>
             </div>
         </div>
-
         <div>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">Host</th>
-                        <th scope="col">IP Address</th>
-                        <th scope="col">Operating System</th>
-                        <th scope="col">Services</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>192.168.100.3</td>
-                        <td>Windows</td>
-                        <td>Apache 2.4</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>192.168.100.50</td>
-                        <td>Windows</td>
-                        <td>Apache 2.4</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>192.168.100.80</td>
-                        <td>Linux/Debian</td>
-                        <td>SFTP 1.8</td>
-                    </tr>
-                </tbody>
-            </table>
+            {% for host in data %}
+        <table class="table mt-3">
+            <thead>
+                <tr class="table-left-align">
+                    <th scope="col" class="table-active">Host {{ host['Host'] }}</th>
+                    <th scope="col" class="table-active">MAC {{ host['MAC'] }}</th>
+                    <th scope="col" class="table-active">OS {{ host['OS'] }}</th>
+                    <th scope="col" class="table-active"></th>
+                </tr>
+                <tr>
+                    <th scope="col">Port</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Protocol</th>
+                    <th scope="col">Service</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for service in host['Services'] %}
+                <tr>
+                    <td>{{ service['Port'] }}</td>
+                    <td>{{ service['Status'] }}</td>
+                    <td>{{ service['Protocol'] }}</td>
+                    <td>{{ service['Service'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endfor %}
         </div>
 
     </div>
@@ -141,6 +159,27 @@
         }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-
+    <script>
+        $(document).ready(function(){
+            $('#loadDataBtn').on('click', function(){
+                $.post('/load_data', function(data){
+                    $('#host-ip').text(data[0].Host);
+                    let services = data[0].Services;
+                    let tableBody = $('#services-body');
+                    tableBody.empty();
+                    services.forEach(function(service){
+                        tableBody.append(
+                            `<tr>
+                                <td>${service.Port}</td>
+                                <td>${service.Status}</td>
+                                <td>${service.Protocol}</td>
+                                <td>${service.Service}</td>
+                            </tr>`
+                        );
+                    });
+                });
+            });
+        });
+    </script>
 </body>
 </html>

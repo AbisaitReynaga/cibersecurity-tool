@@ -1,6 +1,6 @@
 # Import the Flask class from the flask module
-from flask import Flask, render_template
-
+from flask import Flask, render_template, jsonify
+import sh,json
 # Create an instance of the Flask class
 app = Flask(__name__)
 
@@ -21,31 +21,14 @@ def settings():
 def test():
     return render_template('template.html')
 
-@app.route('/scan')
-def scan():
-    # Ejecutar el comando nmap
-    result = subprocess.run(['nmap', '-sn', '192.168.10.0/24'], capture_output=True, text=True)
-    output = result.stdout
-
-    # Parsear el resultado de nmap
-    hosts = []
-    current_host = {}
-    for line in output.split('\n'):
-        ip_match = re.search(r'Nmap scan report for (.+)', line)
-        mac_match = re.search(r'MAC Address: (.+) \((.+)\)', line)
-        if ip_match:
-            if current_host:
-                hosts.append(current_host)
-                current_host = {}
-            current_host['ip'] = ip_match.group(1)
-        if mac_match:
-            current_host['mac'] = mac_match.group(1)
-            current_host['vendor'] = mac_match.group(2)
-
-    if current_host:
-        hosts.append(current_host)
-
-    return jsonify(hosts)
+@app.route('/load_data', methods=['POST'])
+def load_data():
+    # Reemplaza 'tu_script.sh' con la ruta a tu script bash
+    #script_path = '/home/cybersecurity-tool/host_discover_scripts/host_discovery.sh'
+    #sh.bash('/home/cybersecurity-tool/host_discover_scripts/host_discovery.sh')
+    with open('/home/cybersecurity-tool/output.json', 'r') as f:
+        data = json.load(f)
+    return render_template('gattering_information.html',data=data)
 
 # Run the application
 if __name__ == '__main__':
