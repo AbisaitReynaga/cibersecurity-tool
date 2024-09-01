@@ -26,7 +26,7 @@ def load_data():
     # Reemplaza 'tu_script.sh' con la ruta a tu script bash
     #script_path = '/home/cybersecurity-tool/host_discover_scripts/host_discovery.sh'
     #sh.bash('/home/cybersecurity-tool/host_discover_scripts/host_discovery.sh')
-    with open('/home/cybersecurity-tool/output.json', 'r') as f:
+    with open('/home/cybersecurity-tool/results.json', 'r') as f:
         data = json.load(f)
     return render_template('gattering_information.html',data=data)
 

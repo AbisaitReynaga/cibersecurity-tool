@@ -1,3 +1,6 @@
 my-venv/
 run_application
 virtual_enviroment
+*.json
+*.txt
+*.json.backup

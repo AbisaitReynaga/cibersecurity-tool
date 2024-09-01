@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-sudo nmap -sn 192.168.1.0/24 192.168.10.0/24 | grep "Nmap scan report for" | awk '{print $5}' > /home/cybersecurity-tool/aliveHosts.txt
+sudo nmap -sn 192.168.73.0/24 | grep "Nmap scan report for" | awk '{print $5}' > /home/cybersecurity-tool/aliveHosts.txt
 sudo nmap -sV -iL /home/cybersecurity-tool/aliveHosts.txt | awk '
 /Nmap scan report for/ {
     if (host != "") {
