@@ -1,6 +1,6 @@
 # Import the Flask class from the flask module
-from flask import Flask, render_template, jsonify
-import sh,json
+from flask import Flask, render_template,request
+import sh,json,os
 from utils.analyze_data import analyze_data
 # Create an instance of the Flask class
 app = Flask(__name__)
@@ -8,7 +8,7 @@ app = Flask(__name__)
 # Define a route and a function to handle requests to that route
 @app.route('/')
 def index():
-    json_file = '../output.json'  # Adjust the path as needed
+    json_file = 'output.json'  # Adjust the path as needed
     overview_data = analyze_data(json_file)
 
     return render_template('index.html', 
@@ -41,6 +41,25 @@ def load_data():
     with open('/home/cybersecurity-tool/results.json', 'r') as f:
         data = json.load(f)
     return render_template('gattering_information.html',data=data)
+
+@app.route('/save_organization_data', methods=['POST'])
+def save_data():
+
+    data = {
+        "organization_name": request.form.get("organization_name"),
+        "network": request.form.get("network"),
+        "netmask": request.form.get("netmask"),
+        "gateway": request.form.get("gateway"),
+        "domain": request.form.get("domain")
+    }
+
+    json_file_path = os.path.join("data", "config.json")
+
+    with open(json_file_path, 'w') as json_file:
+        json.dump(data, json_file, indent=4)
+
+    return render_template('settings.html',data=data)
+
 
 # Run the application
 if __name__ == '__main__':
