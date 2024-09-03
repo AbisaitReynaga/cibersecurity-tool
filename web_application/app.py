@@ -45,10 +45,15 @@ def load_data():
 @app.route('/save_organization_data', methods=['POST'])
 def save_data():
 
+    netmask = request.form.get("netmask")
+    
+    # Convertir la máscara de red a CIDR
+    cidr = netmask_to_cidr(netmask)
+
     data = {
         "organization_name": request.form.get("organization_name"),
         "network": request.form.get("network"),
-        "netmask": request.form.get("netmask"),
+        "netmask": netmask,
         "gateway": request.form.get("gateway"),
         "domain": request.form.get("domain")
     }
@@ -59,6 +64,17 @@ def save_data():
         json.dump(data, json_file, indent=4)
 
     return render_template('settings.html',data=data)
+
+
+def netmask_to_cidr(netmask):
+    # Convierte la máscara de red en una lista de octetos
+    octets = netmask.split('.')
+    
+    # Convierte cada octeto a binario, cuenta los bits '1'
+    cidr = sum([bin(int(octet)).count('1') for octet in octets])
+    
+    return cidr
+
 
 
 # Run the application
