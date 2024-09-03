@@ -1,13 +1,21 @@
 # Import the Flask class from the flask module
 from flask import Flask, render_template, jsonify
 import sh,json
+from utils.analyze_data import analyze_data
 # Create an instance of the Flask class
 app = Flask(__name__)
 
 # Define a route and a function to handle requests to that route
 @app.route('/')
 def index():
-    return render_template('index.html')
+    json_file = '../output.json'  # Adjust the path as needed
+    overview_data = analyze_data(json_file)
+
+    return render_template('index.html', 
+                           alive_hosts=overview_data['alive_hosts'], 
+                           services=overview_data['total_services'], 
+                           infrastructure=overview_data['infrastructure'], 
+                           risks=overview_data['risks'])
 
 @app.route('/gattering_information')
 def gattering_information():
@@ -20,6 +28,10 @@ def settings():
 @app.route('/test')
 def test():
     return render_template('template.html')
+
+@app.route('/report')
+def report():
+    return render_template('report/report.html')
 
 @app.route('/load_data', methods=['POST'])
 def load_data():
