@@ -29,6 +29,10 @@ def settings():
 def test():
     return render_template('template.html')
 
+@app.route('/report')
+def report():
+    return render_template('report/report.html')
+
 @app.route('/load_data', methods=['POST'])
 def load_data():
     # Reemplaza 'tu_script.sh' con la ruta a tu script bash
