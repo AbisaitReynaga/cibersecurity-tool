@@ -1,7 +1,12 @@
 #!/bin/bash
 
+CONFIG_FILE=/home/cybersecurity-tool/data/config.json
+DATA_FILE=/home/cybersecurity-tool/data/scanning_data.json
 
-sudo nmap -sn 192.168.73.0/24 | grep "Nmap scan report for" | awk '{print $5}' > /home/cybersecurity-tool/aliveHosts.txt
+
+NETWORK=$(cat $CONFIG_FILE | jq -r '.network')
+NETMASK=$(cat $CONFIG_FILE | jq -r '.netmask')
+sudo nmap -sn $NETWORK/$NETMASK | grep "Nmap scan report for" | awk '{print $5}' > /home/cybersecurity-tool/aliveHosts.txt
 sudo nmap -sV -iL /home/cybersecurity-tool/aliveHosts.txt | awk '
 /Nmap scan report for/ {
     if (host != "") {
@@ -53,4 +58,10 @@ END {
         }
         print json_host "}"
     }
-}' > /home/cybersecurity-tool/results.json
+}' > /home/cybersecurity-tool/temp.json
+
+echo "[" > $DATA_FILE
+cat /home/cybersecurity-tool/temp.json >> $DATA_FILE
+echo "]" >> $DATA_FILE
+
+

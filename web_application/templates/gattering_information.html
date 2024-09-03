@@ -48,6 +48,28 @@
         }
 
     </style>
+
+    <style>
+        /* Estilo para la ventana de advertencia */
+        .alert-box {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            margin: 20px 0;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .alert-box h4 {
+            margin: 0;
+            font-size: 1.2em;
+        }
+        .alert-box p {
+            margin: 5px 0 0;
+            font-size: 1em;
+        }
+    </style>
+
 </head>
 <body class="w3-light-grey">
 
@@ -101,6 +123,15 @@
                 </div>
             </div>
         </div>
+	    {% if alert_message %}
+    <div class="alert-box">
+        <h4>Warning</h4>
+        <p>{{ alert_message }}</p>
+    </div>
+    {% endif %}
+
+
+	 {% if data %}
         <div>
             {% for host in data %}
         <table class="table mt-3">
@@ -131,7 +162,7 @@
         </table>
         {% endfor %}
         </div>
-
+	{% endif %}
     </div>
 
     <script>
