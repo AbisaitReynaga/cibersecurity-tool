@@ -1,7 +1,7 @@
 # Import the Flask class from the flask module
 from flask import Flask, render_template,request
 import sh,json,os,subprocess
-from utils.analyze_data import analyze_data
+from utils.data.analyze_data import analyze_data
 # Create an instance of the Flask class
 app = Flask(__name__)
 
