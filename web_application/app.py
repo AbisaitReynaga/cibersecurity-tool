@@ -81,7 +81,6 @@ def save_data():
 
     return render_template('settings.html',data=data)
 
-
 def netmask_to_cidr(netmask):
     # Convierte la máscara de red en una lista de octetos
     octets = netmask.split('.')
@@ -90,8 +89,6 @@ def netmask_to_cidr(netmask):
     cidr = sum([bin(int(octet)).count('1') for octet in octets])
     
     return cidr
-
-
 
 # Run the application
 if __name__ == '__main__':
