@@ -5,4 +5,4 @@ app = Flask(__name__)
 bootstrap = Bootstrap4(app)
 
 # Import routes after initializing the app to avoid circular imports
-from . import routes
+from web_application import routes
