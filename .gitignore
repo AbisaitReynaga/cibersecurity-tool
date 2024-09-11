@@ -5,10 +5,6 @@ virtual_enviroment
 # Ignore application runtime files
 run_application
 
-# Ignore JSON and text files (if they are not needed in version control)
-*.json
-*.json.backup
-*.txt
 
 # Ignore Python bytecode files
 __pycache__/
