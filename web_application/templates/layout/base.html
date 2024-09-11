@@ -4,22 +4,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Default Title{% endblock %}</title>
+    <title>{% block title %}Webserver Auditorias Web{% endblock %}</title>
+    <style>
+        html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+    </style>
+
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+    <!-- Use Flask-Bootstrap's pre-included CSS -->
+    {{ bootstrap.load_css() }}
 </head>
-<body>
-    <header>
-        <h1>Header Content</h1>
+
+<body class="w3-light-grey">
+    <header class="bg-primary text-white text-center py-4">
+        <h1>Webserver Auditorias Web</h1>
     </header>
-    <nav>
-        <!-- Navigation Menu -->
-    </nav>
-    <main>
-        {% block content %}
-        <!-- Default Content -->
-        {% endblock %}
-    </main>
-    <footer>
-        <p>Footer Content</p>
-    </footer>
+
+    <!-- Include the Sidebar -->
+    {% include 'layout/sidebar.html' %}
+
+
+    <div class="w3-main" style="margin-left:300px;margin-top:43px;">
+        <main class="container my-5">
+            {% block content %}
+            <!-- Default Content -->
+            {% endblock %}
+        </main>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-3">
+        <p>&copy; 2024 Webserver Auditorias Web</p>
+    </footer> 
+
+
+    <!-- Use Flask-Bootstrap's pre-included JS -->
+    {{ bootstrap.load_js() }}
 </body>
+
 </html>
