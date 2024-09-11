@@ -10,6 +10,7 @@ sudo apt upgrade -y
 
 # Install Python dependencies
 echo "Installing required Python packages..."
+cd web_application
 pip install -r requirements.txt
 
 # Verify installation
