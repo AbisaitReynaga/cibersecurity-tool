@@ -5,16 +5,17 @@ from web_application.utils.data.analyze_data import analyze_data
 
 @app.route('/')
 def index():
-    json_file = '/home/cybersecurity-tool/data/scanning_data.json'  # Adjust the path as needed
-    overview_data = analyze_data(json_file)
+    # json_file = '/home/cybersecurity-tool/data/scanning_data.json'  
+    # overview_data = analyze_data(json_file)
 
-    return render_template(
-        'index.html', 
-        alive_hosts=overview_data['alive_hosts'], 
-        services=overview_data['total_services'], 
-        infrastructure=overview_data['infrastructure'], 
-        risks=overview_data['risks']
-    )
+    # return render_template(
+    #     'index.html', 
+    #     alive_hosts=overview_data['alive_hosts'], 
+    #     services=overview_data['total_services'], 
+    #     infrastructure=overview_data['infrastructure'], 
+    #     risks=overview_data['risks']
+    # )
+    return render_template('overview/overview.html')
 
 @app.route('/overview')
 def overview():
