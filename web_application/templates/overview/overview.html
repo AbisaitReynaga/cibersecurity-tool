@@ -4,5 +4,37 @@
 
 {% block content %}
     <h1>Overview</h1>
-    <!-- Your existing HTML content here -->
+
+    <!-- Card Header -->
+    <div class="w3-row-padding w3-margin-bottom">
+        <div class="w3-quarter">
+            {% set color_class = 'w3-red' %}
+            {% set icon_class = 'fa-comment' %}
+            {% set value = alive_hosts %}
+            {% set label = 'ALIVE HOSTS' %}
+            {% include 'components/card.html' %}
+        </div>
+        <div class="w3-quarter">
+            {% set color_class = 'w3-blue' %}
+            {% set icon_class = 'fa-eye' %}
+            {% set value = services %}
+            {% set label = 'SERVICES' %}
+            {% include 'components/card.html' %}
+        </div>
+        <div class="w3-quarter">
+            {% set color_class = 'w3-teal' %}
+            {% set icon_class = 'fa-share-alt' %}
+            {% set value = infrastructure %}
+            {% set label = 'INFRASTRUCTURE' %}
+            {% include 'components/card.html' %}
+        </div>
+        <div class="w3-quarter">
+            {% set color_class = 'w3-orange w3-text-white' %}
+            {% set icon_class = 'fa-users' %}
+            {% set value = risks %}
+            {% set label = 'RISKS' %}
+            {% include 'components/card.html' %}
+        </div>
+    </div>
+
 {% endblock %}
