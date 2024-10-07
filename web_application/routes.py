@@ -8,15 +8,18 @@ def index():
     json_file = '/home/cybersecurity-tool/data/scanning_data.json'  
     overview_data = analyze_data(json_file)
 
-    # Example values for findings
+    # Dummy data for top findings
+    findings_labels = ["Finding A", "Finding B", "Finding C", "Finding D", "Finding E"]
+    findings_data = [10, 20, 30, 25, 15]  # Corresponding data for each finding
+
     findings_list = [
-        {'icon': 'fa fa-user', 'color': 'w3-text-blue', 'description': 'New record, over 90 views.', 'time': '10 mins'},
-        {'icon': 'fa fa-bell', 'color': 'w3-text-red', 'description': 'Database error.', 'time': '15 mins'},
-        {'icon': 'fa fa-users', 'color': 'w3-text-yellow', 'description': 'New record, over 40 users.', 'time': '17 mins'},
-        {'icon': 'fa fa-comment', 'color': 'w3-text-red', 'description': 'New comments.', 'time': '25 mins'},
-        {'icon': 'fa fa-bookmark', 'color': 'w3-text-blue', 'description': 'Check transactions.', 'time': '28 mins'},
-        {'icon': 'fa fa-laptop', 'color': 'w3-text-red', 'description': 'CPU overload.', 'time': '35 mins'},
-        {'icon': 'fa fa-share-alt', 'color': 'w3-text-green', 'description': 'New shares.', 'time': '39 mins'}
+        {"description": "New record, over 90 views.", "time": "10 mins"},
+        {"description": "Database error.", "time": "15 mins"},
+        {"description": "New record, over 40 users.", "time": "17 mins"},
+        {"description": "New comments.", "time": "25 mins"},
+        {"description": "Check transactions.", "time": "28 mins"},
+        {"description": "CPU overload.", "time": "35 mins"},
+        {"description": "New shares.", "time": "39 mins"}
     ]
 
     return render_template(
@@ -24,10 +27,11 @@ def index():
         alive_hosts=overview_data['alive_hosts'], 
         services=overview_data['total_services'], 
         infrastructure=overview_data['infrastructure'], 
-        risks=overview_data['risks'],
-        findings_list=findings_list
+        risks=overview_data['risks'], 
+        findings_list=findings_list,
+        findings_labels=findings_labels,
+        findings_data=findings_data
     )
-
 
 @app.route('/overview')
 def overview():

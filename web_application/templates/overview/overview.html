@@ -5,9 +5,6 @@
 {% block content %}
     <h1>Overview</h1>
 
-    <!-- Include Pie Chart Tool -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <!-- Card Header -->
     <div class="w3-row-padding w3-margin-bottom">
         <div class="w3-quarter">
@@ -40,15 +37,26 @@
         </div>
     </div>
 
-
     <!-- Findings Block -->
     {% set title_image = "Regions" %}
     {% set image_url = "/w3images/region.jpg" %}
     {% set image_alt = "Google Regional Map" %}
     {% set title_table = "Feeds" %}
-    {% set findings = findings_list %}
+    {% include 'components/findings.html' findings=findings_list title_image=title_image image_url=image_url image_alt=image_alt %}
+
+    <!-- Example to include Chart.js from a CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Include the pie chart canvas -->
+    <canvas id="findingsPieChart" width="400" height="400"></canvas>
+
+    <!-- Pass data as global variables -->
+    <script>
+        window.findingsLabels = {{ findings_labels | tojson }};
+        window.findingsData = {{ findings_data | tojson }};
+    </script>
     
-    {% include 'components/findings.html' %}
-    
+    <!-- Include the JavaScript file -->
+    <script src="{{ url_for('static', filename='js/findingsChart.js') }}"></script>
 
 {% endblock %}
