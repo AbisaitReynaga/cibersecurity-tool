@@ -5,17 +5,29 @@ from web_application.utils.data.analyze_data import analyze_data
 
 @app.route('/')
 def index():
-    # json_file = '/home/cybersecurity-tool/data/scanning_data.json'  
-    # overview_data = analyze_data(json_file)
+    json_file = '/home/cybersecurity-tool/data/scanning_data.json'  
+    overview_data = analyze_data(json_file)
 
-    # return render_template(
-    #     'index.html', 
-    #     alive_hosts=overview_data['alive_hosts'], 
-    #     services=overview_data['total_services'], 
-    #     infrastructure=overview_data['infrastructure'], 
-    #     risks=overview_data['risks']
-    # )
-    return render_template('overview/overview.html')
+    # Example values for findings
+    findings_list = [
+        {'icon': 'fa fa-user', 'color': 'w3-text-blue', 'description': 'New record, over 90 views.', 'time': '10 mins'},
+        {'icon': 'fa fa-bell', 'color': 'w3-text-red', 'description': 'Database error.', 'time': '15 mins'},
+        {'icon': 'fa fa-users', 'color': 'w3-text-yellow', 'description': 'New record, over 40 users.', 'time': '17 mins'},
+        {'icon': 'fa fa-comment', 'color': 'w3-text-red', 'description': 'New comments.', 'time': '25 mins'},
+        {'icon': 'fa fa-bookmark', 'color': 'w3-text-blue', 'description': 'Check transactions.', 'time': '28 mins'},
+        {'icon': 'fa fa-laptop', 'color': 'w3-text-red', 'description': 'CPU overload.', 'time': '35 mins'},
+        {'icon': 'fa fa-share-alt', 'color': 'w3-text-green', 'description': 'New shares.', 'time': '39 mins'}
+    ]
+
+    return render_template(
+        'overview/overview.html', 
+        alive_hosts=overview_data['alive_hosts'], 
+        services=overview_data['total_services'], 
+        infrastructure=overview_data['infrastructure'], 
+        risks=overview_data['risks'],
+        findings_list=findings_list
+    )
+
 
 @app.route('/overview')
 def overview():

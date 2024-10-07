@@ -1,0 +1,24 @@
+<!-- components/findings.html -->
+<div class="w3-panel">
+    <div class="w3-row-padding" style="margin:0 -16px">
+        <div class="w3-third">
+            <h5>{{ title_image }}</h5>
+            <img src="{{ image_url }}" style="width:100%" alt="{{ image_alt }}">
+        </div>
+        <div class="w3-twothird">
+            <h5>{{ title_table }}</h5>
+            <table class="w3-table w3-striped w3-white">
+                <tbody>
+                    {% for finding in findings %}
+                    <tr>
+                        <td><i class="{{ finding.icon }} {{ finding.color }} w3-large"></i></td>
+                        <td>{{ finding.description }}</td>
+                        <td><i>{{ finding.time }}</i></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<hr>
