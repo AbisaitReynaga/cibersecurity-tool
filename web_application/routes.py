@@ -19,7 +19,11 @@ def index():
 
 @app.route('/overview')
 def overview():
-    return render_template('overview.html')
+    return render_template('overview/overview.html')
+
+@app.route('/hidden')  # or any other appropriate route name
+def hidden():
+    return render_template('index.html')
 
 @app.route('/gattering_information')
 def gattering_information():
