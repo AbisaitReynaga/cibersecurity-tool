@@ -11,12 +11,21 @@ sudo apt upgrade -y
 # Create and activate a virtual environment
 echo "Setting up virtual environment..."
 python3 -m venv venv
+
+# Activate the virtual environment
+# It's good to use the full path to ensure it works in non-interactive shells
 source venv/bin/activate
 
-# Install Python dependencies
-echo "Installing required Python packages..."
-cd web_application
+# Navigate to the web_application directory (if not already in it)
+cd web_application || { echo "Directory 'web_application' not found!"; exit 1; }
+
+# Upgrade pip
+echo "Upgrading pip..."
+pip install --upgrade pip
+
+# Install required packages from requirements.txt
+echo "Installing required packages..."
 pip install -r requirements.txt
 
-# Verify installation
-echo "All required packages have been installed successfully."
+# Additional setup commands can be added here
+echo "Installation complete!"
