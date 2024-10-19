@@ -3,7 +3,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('findingsPieChart').getContext('2d');
 
-    const findingsPieChart = new Chart(ctx, {
+    var findingsPieChart = new Chart(ctx, {
         type: 'pie',
         data: {
             labels: window.findingsLabels,
