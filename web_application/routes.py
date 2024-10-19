@@ -1,6 +1,7 @@
 from flask import render_template, request
 from web_application import app
 import sh, json, os, subprocess
+from web_application.default_data import get_default_data_overview_label
 from web_application.utils.data.analyze_data import analyze_data
 
 @app.route('/')
@@ -35,7 +36,16 @@ def index():
 
 @app.route('/overview')
 def overview():
-    return render_template('overview/overview.html')
+    # Sample data for testing
+    data = get_default_data_overview_label()
+
+    return render_template('overview/overview.html', 
+                           findings_labels=data["findings_labels"], 
+                           findings_data=data["findings_data"],
+                           alive_hosts=data["alive_hosts"],
+                           services=data["services"],
+                           infrastructure=data["infrastructure"],
+                           risks=data["risks"])
 
 @app.route('/hidden')  # or any other appropriate route name
 def hidden():
