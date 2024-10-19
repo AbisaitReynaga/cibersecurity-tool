@@ -1,12 +1,14 @@
-from flask import render_template, request
+from flask import render_template, request, Blueprint
 from web_application import app
 import sh, json, os, subprocess
-from web_application.default_data import get_default_data_overview_label
+from web_application.data.default_data import get_default_data_overview_label
 from web_application.utils.data.analyze_data import analyze_data
+
+overview = Blueprint('overview', __name__)
 
 @app.route('/')
 def index():
-    json_file = '/home/cybersecurity-tool/data/scanning_data.json'  
+    json_file = '/home/cybersecurity-tool/web_application/data/scanning_data.json'  
     overview_data = analyze_data(json_file)
 
     # Dummy data for top findings
@@ -36,16 +38,7 @@ def index():
 
 @app.route('/overview')
 def overview():
-    # Sample data for testing
-    data = get_default_data_overview_label()
-
-    return render_template('overview/overview.html', 
-                           findings_labels=data["findings_labels"], 
-                           findings_data=data["findings_data"],
-                           alive_hosts=data["alive_hosts"],
-                           services=data["services"],
-                           infrastructure=data["infrastructure"],
-                           risks=data["risks"])
+    return index()  
 
 @app.route('/hidden')  # or any other appropriate route name
 def hidden():
