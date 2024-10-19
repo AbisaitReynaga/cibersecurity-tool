@@ -28,9 +28,9 @@ cd web_application || { echo "Directory 'web_application' not found!"; exit 1; }
 echo "Installing required packages..."
 pip install -r requirements.txt
 
+# Additional setup commands can be added here
+echo "Installation complete!"
+
 # Run the Flask application
 echo "Starting the Flask application..."
 python run.py
-
-# Additional setup commands can be added here
-echo "Installation complete!"
