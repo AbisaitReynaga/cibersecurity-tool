@@ -38,11 +38,6 @@
     </div>
 
     <!-- Findings Block -->
-    {% set title_image = "Regions" %}
-    {% set image_url = "/w3images/region.jpg" %}
-    {% set image_alt = "Google Regional Map" %}
-    {% set title_table = "Feeds" %}
-    {% include 'components/findings.html' findings=findings_list title_image=title_image image_url=image_url image_alt=image_alt %}
 
     <!-- Example to include Chart.js from a CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -52,8 +47,8 @@
 
     <!-- Pass data as global variables -->
     <script>
-        window.findingsLabels = {{ findings_labels | tojson }};
-        window.findingsData = {{ findings_data | tojson }};
+        //window.findingsLabels = {{ findings_labels | tojson }};
+        //window.findingsData = {{ findings_data | tojson }};
     </script>
     
     <!-- Include the JavaScript file -->
