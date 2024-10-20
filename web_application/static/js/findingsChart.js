@@ -21,9 +21,22 @@ function renderFindingsChart(findingsLabels, findingsData) {
                 title: {
                     display: true,
                     text: 'Findings Overview'
+                },
+                datalabels: {
+                    color: '#fff',  // Set label color
+                    formatter: function(value, context) {
+                        // Display both label and value
+                        const label = context.chart.data.labels[context.dataIndex];
+                        return label + ': ' + value;
+                    },
+                    font: {
+                        weight: 'bold',
+                        size: 14
+                    }
                 }
             }
-        }
+        },
+        plugins: [ChartDataLabels] // Enable the Data Labels Plugin
     });
 }
 
