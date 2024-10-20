@@ -1,4 +1,4 @@
-from flask import render_template, request, Blueprint
+from flask import render_template, request, Blueprint, jsonify
 from web_application import app
 import sh, json, os, subprocess
 from web_application.data.default_data import get_default_data_overview_label
@@ -12,30 +12,22 @@ def index():
     json_file = '/home/cybersecurity-tool/web_application/data/scanning_data.json'  
     overview_data = analyze_data(json_file)
 
-    # Dummy data for top findings
-    findings_labels = ["Finding A", "Finding B", "Finding C", "Finding D", "Finding E"]
-    findings_data = [10, 20, 30, 25, 15]  # Corresponding data for each finding
-
-    findings_list = [
-        {"description": "New record, over 90 views.", "time": "10 mins"},
-        {"description": "Database error.", "time": "15 mins"},
-        {"description": "New record, over 40 users.", "time": "17 mins"},
-        {"description": "New comments.", "time": "25 mins"},
-        {"description": "Check transactions.", "time": "28 mins"},
-        {"description": "CPU overload.", "time": "35 mins"},
-        {"description": "New shares.", "time": "39 mins"}
-    ]
-
     return render_template(
         'overview/overview.html', 
-        findings_labels=findings_labels,
-        findings_data=findings_data,
         alive_hosts=overview_data['alive_hosts'], 
         services=overview_data['total_services'], 
         infrastructure=overview_data['infrastructure'], 
-        risks=overview_data['risks'], 
-        findings_list=findings_list
+        risks=overview_data['risks']
     )
+
+@app.route('/api/findings-data')
+def get_findings_data():
+    # Example data, in reality, this might come from a database or other source
+    findings_data = {
+        'labels': ['Vulnerabilities', 'Open Ports', 'Misconfigurations', 'Weak Passwords', 'Others'],
+        'data': [12, 19, 3, 5, 2]
+    }
+    return jsonify(findings_data)
 
 @app.route('/hidden')  # or any other appropriate route name
 def hidden():

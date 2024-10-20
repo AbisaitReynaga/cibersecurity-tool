@@ -27,7 +27,15 @@ function renderFindingsChart(findingsLabels, findingsData) {
     });
 }
 
+// Fetch data from the API and render the chart
 document.addEventListener('DOMContentLoaded', function() {
-    // Assuming findingsLabels and findingsData are available globally from the template
-    renderFindingsChart(window.findingsLabels, window.findingsData);
+    fetch('/api/findings-data')
+        .then(response => response.json())
+        .then(data => {
+            const { labels, data: findingsData } = data;
+            renderFindingsChart(labels, findingsData);
+        })
+        .catch(error => {
+            console.error('Error fetching findings data:', error);
+        });
 });
