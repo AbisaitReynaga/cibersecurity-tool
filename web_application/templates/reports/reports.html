@@ -8,14 +8,3 @@
 
 
 {% endblock %}
-
-{% block scripts %}
-    <script>
-        // Simplified JS only to handle loading default values if needed
-        function loadDefault() {
-            document.getElementById('title').value = 'Default Report Title';
-            document.getElementById('description').value = 'Default description for the report.';
-            document.getElementById('data').value = JSON.stringify({ key: "default value" }, null, 4);
-        }
-    </script>
-{% endblock %}
