@@ -1,48 +1,50 @@
-<!-- templates/reports/reports.html -->
 {% extends 'layout/base.html' %}
 
 {% block title %}Report{% endblock %}
 
 {% block content %}
-<h1>Report Site</h1>
-<p>This is the Report default page.</p>
+    <section class="report-section">
+        <h1>Generate Report</h1>
+        <p>Fill out the form below to create a custom report:</p>
 
-<form method="POST" id="reportForm">
-    <label for="title">Report Title:</label>
-    <input type="text" id="title" name="title" required oninput="updatePreview()">
+        <form method="POST" id="reportForm" class="report-form">
+            <div class="form-group">
+                <label for="title">Report Title:</label>
+                <input type="text" id="title" name="title" required placeholder="Enter report title" oninput="updatePreview()">
+            </div>
 
-    <label for="description">Description:</label>
-    <textarea id="description" name="description" required oninput="updatePreview()"></textarea>
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" required placeholder="Enter report description" oninput="updatePreview()"></textarea>
+            </div>
 
-    <label for="data">Additional Data (JSON):</label>
-    <textarea id="data" name="data" placeholder='{"key": "value"}' required oninput="updatePreview()"></textarea>
+            <div class="form-group">
+                <label for="data">Additional Data (JSON):</label>
+                <textarea id="data" name="data" required placeholder='{"key": "value"}' oninput="updatePreview()"></textarea>
+            </div>
 
-    <button type="submit">Generate Report</button>
-</form>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Generate Report</button>
+            </div>
+        </form>
+    </section>
 
-<main>
-    <h2>Preview:</h2>
-    <div id="preview">
-        <h3 id="previewTitle"></h3>
-        <p id="previewDescription"></p>
-        <h4>Additional Data:</h4>
-        <pre id="previewData"></pre>
+    <section class="preview-section">
+        <h2>Report Preview</h2>
+        <div id="preview" class="report-preview">
+            <h3 id="previewTitle">Your report title will appear here</h3>
+            <p id="previewDescription">Your report description will appear here</p>
+            <h4>Additional Data:</h4>
+            <pre id="previewData">Your additional data will appear here in JSON format</pre>
+        </div>
+
         {% include 'reports/report_template.html' %}
-    </div>
-</main>
+    </section>
 
-<script>
-    function updatePreview() {
-        // Get the values from the input fields
-        const title = document.getElementById('title').value;
-        const description = document.getElementById('description').value;
-        const data = document.getElementById('data').value;
+{% endblock %}
 
-        // Update the preview section
-        document.getElementById('previewTitle').innerText = title || 'Your report title will appear here';
-        document.getElementById('previewDescription').innerText = description || 'Your report description will appear here';
-        document.getElementById('previewData').innerText = data || 'Your additional data will appear here in JSON format';
-    }
-</script>
-
+{% block scripts %}
+    <script>
+        {{ preview_script|safe }}
+    </script>
 {% endblock %}
