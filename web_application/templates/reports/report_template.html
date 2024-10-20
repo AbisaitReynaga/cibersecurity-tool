@@ -1,0 +1,28 @@
+<!-- templates/report/report_template.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Report</title>
+    <style>
+        /* Add your styles here */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Report Title</h1>
+    <p>Date: {{ data.date }}</p>
+    <p>Summary: {{ data.summary }}</p>
+    <h2>Details</h2>
+    <ul>
+        {% for item in data.items %}
+            <li>{{ item.name }}: {{ item.value }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
