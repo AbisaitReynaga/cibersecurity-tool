@@ -1,7 +1,7 @@
 from flask import render_template, request, Blueprint, jsonify
 from web_application import app
 import sh, json, os, subprocess
-from web_application.api.default_data import get_default_data_pie_chart_overview
+from web_application.api.default_data import get_default_data_overview_label, get_default_data_pie_chart_overview, get_findings_list_services
 from web_application.utils.data.analyze_data import analyze_data
 
 overview = Blueprint('overview', __name__)
@@ -10,14 +10,17 @@ overview = Blueprint('overview', __name__)
 @app.route('/overview')
 def index():
     json_file = '/home/cybersecurity-tool/web_application/data/scanning_data.json'  
-    overview_data = analyze_data(json_file)
+    # overview_data = analyze_data(json_file)
+    overview_data = get_default_data_overview_label()
+    findings_services = get_findings_list_services()  
 
     return render_template(
         'overview/overview.html', 
         alive_hosts=overview_data['alive_hosts'], 
-        services=overview_data['total_services'], 
+        services=overview_data['services'], 
         infrastructure=overview_data['infrastructure'], 
-        risks=overview_data['risks']
+        risks=overview_data['risks'],
+        findings_services=findings_services  
     )
 
 @app.route('/overview/findings')

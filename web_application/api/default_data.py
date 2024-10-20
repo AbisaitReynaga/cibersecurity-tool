@@ -2,8 +2,6 @@
 
 def get_default_data_overview_label():
     return {
-        "findings_labels": ["Critical", "High", "Medium", "Low"],
-        "findings_data": [10, 20, 30, 40],
         "alive_hosts": 5,
         "services": 10,
         "infrastructure": 3,
@@ -16,13 +14,11 @@ def get_default_data_pie_chart_overview():
         "findings_data": [10, 20, 30, 25, 15]
     }
 
-def get_findings_list():
+def get_findings_list_services():
     return [
-        {"description": "New record, over 90 views.", "time": "10 mins"},
-        {"description": "Database error.", "time": "15 mins"},
-        {"description": "New record, over 40 users.", "time": "17 mins"},
-        {"description": "New comments.", "time": "25 mins"},
-        {"description": "Check transactions.", "time": "28 mins"},
-        {"description": "CPU overload.", "time": "35 mins"},
-        {"description": "New shares.", "time": "39 mins"}
+        {"icon": "icon/ftp.png", "title": "FTP", "number": 12},
+        {"icon": "icon/http.png", "title": "HTTP", "number": 25},
+        {"icon": "icon/ssh.png", "title": "SSH", "number": 7},
+        {"icon": "icon/smtp.png", "title": "SMTP", "number": 5},
     ]
+
