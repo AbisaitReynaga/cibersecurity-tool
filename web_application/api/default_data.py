@@ -16,9 +16,8 @@ def get_default_data_pie_chart_overview():
 
 def get_findings_list_services():
     return [
-        {"icon": "icon/ftp.png", "title": "FTP", "number": 12},
-        {"icon": "icon/http.png", "title": "HTTP", "number": 25},
-        {"icon": "icon/ssh.png", "title": "SSH", "number": 7},
-        {"icon": "icon/smtp.png", "title": "SMTP", "number": 5},
+        {"icon": "images/icons/ftp.png", "title": "FTP", "number": 12},
+        {"icon": "images/icons/http.png", "title": "HTTP", "number": 25},
+        {"icon": "images/icons/ssh.png", "title": "SSH", "number": 7},
+        {"icon": "images/icons/smtp.png", "title": "SMTP", "number": 5},
     ]
-
