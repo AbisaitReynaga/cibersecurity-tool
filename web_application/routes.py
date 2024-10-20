@@ -1,4 +1,4 @@
-from flask import render_template, request, Blueprint, jsonify
+from flask import render_template, request, Blueprint, jsonify, redirect, url_for
 from web_application import app
 import sh, json, os, subprocess
 from web_application.api.default_data import get_default_data_overview_label, get_default_data_pie_chart_overview, get_findings_list_services
@@ -50,20 +50,24 @@ def risk_information():
 
 @app.route('/reports', methods=['GET', 'POST'])
 def reports():
+    # Initial data setup with default values
     data = {
         "date": "2024-10-19",
         "client_name": "ABC Corp",
+        "title": "Default Report Title",  # Add default title
+        "description": "Default description for the report.",  # Add default description
+        "json_data": {},  # Default JSON data
         "methodology": {
-                "Nmap": "Used for network scanning",
-                "Nessus": "Vulnerability scanning tool"
-            },
+            "Nmap": "Used for network scanning",
+            "Nessus": "Vulnerability scanning tool"
+        },
         "risk_scale": {
             "Low": "Minimal risk, no immediate action needed",
             "Medium": "Moderate risk, some action required",
             "High": "Significant risk, immediate action recommended",
             "Critical": "Severe risk, urgent attention required"
-        }  # Add risk_scale here
-        }
+        },
+    }
 
     if request.method == 'POST':
         # Fetch data from the form (including the JSON data entered by the user)
@@ -89,6 +93,7 @@ def reports():
 
     # Render the initial report form
     return render_template('reports/reports.html', data=data)
+
 
 @app.route('/settings')
 def settings():

@@ -7,44 +7,65 @@
         <h1>Generate Report</h1>
         <p>Fill out the form below to create a custom report:</p>
 
-        <form method="POST" id="reportForm" class="report-form">
-            <div class="form-group">
-                <label for="title">Report Title:</label>
-                <input type="text" id="title" name="title" required placeholder="Enter report title" oninput="updatePreview()">
-            </div>
+        {% include 'reports/form_update.html' %}
 
-            <div class="form-group">
-                <label for="description">Description:</label>
-                <textarea id="description" name="description" required placeholder="Enter report description" oninput="updatePreview()"></textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="data">Additional Data (JSON):</label>
-                <textarea id="data" name="data" required placeholder='{"key": "value"}' oninput="updatePreview()"></textarea>
-            </div>
-
-            <div class="form-actions">
-                <button type="submit" class="btn btn-primary">Generate Report</button>
-            </div>
-        </form>
     </section>
 
     <section class="preview-section">
         <h2>Report Preview</h2>
         <div id="preview" class="report-preview">
-            <h3 id="previewTitle">Your report title will appear here</h3>
-            <p id="previewDescription">Your report description will appear here</p>
+            <h3 id="previewTitle">{{ data.title }}</h3>
+            <p id="previewDescription">{{ data.description }}</p>
             <h4>Additional Data:</h4>
-            <pre id="previewData">Your additional data will appear here in JSON format</pre>
+            <pre id="previewData">{{ data.json_data | tojson }}</pre>
         </div>
-
-        {% include 'reports/report_template.html' %}
     </section>
 
 {% endblock %}
 
 {% block scripts %}
     <script>
-        {{ preview_script|safe }}
+        function toggleEdit() {
+    const reportForm = document.getElementById('reportForm');
+    const isEditable = reportForm.querySelector('input, textarea').disabled;
+
+    // Toggle the disabled property for inputs
+    reportForm.querySelectorAll('input, textarea').forEach(input => {
+        input.disabled = !isEditable;
+    });
+
+    // Toggle button visibility and text
+    const editButton = document.getElementById('editButton');
+    const saveButton = document.getElementById('saveButton');
+    editButton.style.display = isEditable ? 'none' : 'inline-block';
+}
+
+// Remove saveChanges function since we are using form submission directly
+
+        function saveChanges() {
+            const reportForm = document.getElementById('reportForm');
+            // Submit the form to save changes
+            reportForm.submit();
+        }
+
+        function loadDefault() {
+            // Set default values (this can be customized based on your needs)
+            document.getElementById('title').value = 'Default Report Title';
+            document.getElementById('description').value = 'Default description for the report.';
+            document.getElementById('data').value = JSON.stringify({ key: "default value" }, null, 4); // Example JSON structure
+            updatePreview(); // Update the preview to reflect default values
+        }
+
+        function updatePreview() {
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+            const data = document.getElementById('data').value;
+
+            // Update the preview section
+            document.getElementById('previewTitle').innerText = title || 'Your report title will appear here';
+            document.getElementById('previewDescription').innerText = description || 'Your report description will appear here';
+            document.getElementById('previewData').innerText = data || 'Your additional data will appear here in JSON format';
+        }
     </script>
 {% endblock %}
+a
