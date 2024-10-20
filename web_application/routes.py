@@ -50,7 +50,7 @@ def risk_information():
 
 @app.route('/reports')
 def reports():
-    return render_template('reports.html')
+    return render_template('reports/reports.html')
 
 @app.route('/settings')
 def settings():
