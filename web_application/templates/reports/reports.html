@@ -7,7 +7,41 @@
 <h1>Report Site</h1>
 <p>This is the Report default page.</p>
 
-<form method="POST">
+<form method="POST" id="reportForm">
+    <label for="title">Report Title:</label>
+    <input type="text" id="title" name="title" required oninput="updatePreview()">
+
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" required oninput="updatePreview()"></textarea>
+
+    <label for="data">Additional Data (JSON):</label>
+    <textarea id="data" name="data" placeholder='{"key": "value"}' required oninput="updatePreview()"></textarea>
+
     <button type="submit">Generate Report</button>
 </form>
+
+<main>
+    <h2>Preview:</h2>
+    <div id="preview">
+        <h3 id="previewTitle"></h3>
+        <p id="previewDescription"></p>
+        <h4>Additional Data:</h4>
+        <pre id="previewData"></pre>
+    </div>
+</main>
+
+<script>
+    function updatePreview() {
+        // Get the values from the input fields
+        const title = document.getElementById('title').value;
+        const description = document.getElementById('description').value;
+        const data = document.getElementById('data').value;
+
+        // Update the preview section
+        document.getElementById('previewTitle').innerText = title || 'Your report title will appear here';
+        document.getElementById('previewDescription').innerText = description || 'Your report description will appear here';
+        document.getElementById('previewData').innerText = data || 'Your additional data will appear here in JSON format';
+    }
+</script>
+
 {% endblock %}
