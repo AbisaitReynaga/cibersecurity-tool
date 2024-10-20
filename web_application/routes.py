@@ -48,9 +48,37 @@ def domain_analyze():
 def risk_information():
     return render_template('risk_information.html')
 
-@app.route('/reports')
+@app.route('/reports', methods=['GET', 'POST'])
 def reports():
-    return render_template('reports/reports.html')
+    data = {
+        "date": "2024-10-20",
+        "key": "value"  # Example data; you can use real JSON data here
+    }
+
+    if request.method == 'POST':
+        # Fetch data from the form (including the JSON data entered by the user)
+        title = request.form.get('title')
+        description = request.form.get('description')
+        json_data = request.form.get('data')  # Get the JSON data input from the form
+
+        # Validate or process the JSON data if necessary
+        try:
+            json_data = json.loads(json_data)  # Parse the JSON input if it's valid JSON
+        except ValueError:
+            json_data = None 
+
+        # Update data object with form data
+        data.update({
+            "title": title,
+            "description": description,
+            "json_data": json_data if json_data else {"error": "Invalid JSON format."}
+        })
+
+        # Return the updated page with the provided data
+        return render_template('reports/reports.html', data=data)
+
+    # Render the initial report form
+    return render_template('reports/reports.html', data=data)
 
 @app.route('/settings')
 def settings():
