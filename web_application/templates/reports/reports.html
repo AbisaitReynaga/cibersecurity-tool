@@ -11,46 +11,11 @@
 
 {% block scripts %}
     <script>
-        function toggleEdit() {
-    const reportForm = document.getElementById('reportForm');
-    const isEditable = reportForm.querySelector('input, textarea').disabled;
-
-    // Toggle the disabled property for inputs
-    reportForm.querySelectorAll('input, textarea').forEach(input => {
-        input.disabled = !isEditable;
-    });
-
-    // Toggle button visibility and text
-    const editButton = document.getElementById('editButton');
-    const saveButton = document.getElementById('saveButton');
-    editButton.style.display = isEditable ? 'none' : 'inline-block';
-}
-
-// Remove saveChanges function since we are using form submission directly
-
-        function saveChanges() {
-            const reportForm = document.getElementById('reportForm');
-            // Submit the form to save changes
-            reportForm.submit();
-        }
-
+        // Simplified JS only to handle loading default values if needed
         function loadDefault() {
-            // Set default values (this can be customized based on your needs)
             document.getElementById('title').value = 'Default Report Title';
             document.getElementById('description').value = 'Default description for the report.';
-            document.getElementById('data').value = JSON.stringify({ key: "default value" }, null, 4); // Example JSON structure
-            updatePreview(); // Update the preview to reflect default values
-        }
-
-        function updatePreview() {
-            const title = document.getElementById('title').value;
-            const description = document.getElementById('description').value;
-            const data = document.getElementById('data').value;
-
-            // Update the preview section
-            document.getElementById('previewTitle').innerText = title || 'Your report title will appear here';
-            document.getElementById('previewDescription').innerText = description || 'Your report description will appear here';
-            document.getElementById('previewData').innerText = data || 'Your additional data will appear here in JSON format';
+            document.getElementById('data').value = JSON.stringify({ key: "default value" }, null, 4);
         }
     </script>
 {% endblock %}
