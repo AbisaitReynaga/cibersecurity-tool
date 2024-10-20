@@ -42,10 +42,10 @@ function renderFindingsChart(findingsLabels, findingsData) {
 
 // Fetch data from the API and render the chart
 document.addEventListener('DOMContentLoaded', function() {
-    fetch('/api/findings-data')
+    fetch('/overview/findings')
         .then(response => response.json())
         .then(data => {
-            const { labels, data: findingsData } = data;
+            const { findings_labels: labels, findings_data: findingsData } = data;
             renderFindingsChart(labels, findingsData);
         })
         .catch(error => {

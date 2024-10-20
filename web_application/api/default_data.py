@@ -8,18 +8,16 @@ def get_default_data_overview_label():
         "services": 10,
         "infrastructure": 3,
         "risks": 2,
-        
     }
 
 def get_default_data_pie_chart_overview():
     return {
-        
+        "findings_labels": ['Vulnerabilities', 'Open Ports', 'Misconfigurations', 'Weak Passwords', 'Others'],
+        "findings_data": [10, 20, 30, 25, 15]
     }
-    # Dummy data for top findings
-    findings_labels = ['Vulnerabilities', 'Open Ports', 'Misconfigurations', 'Weak Passwords', 'Others']
-    findings_data = [10, 20, 30, 25, 15]  # Corresponding data for each finding
 
-    findings_list = [
+def get_findings_list():
+    return [
         {"description": "New record, over 90 views.", "time": "10 mins"},
         {"description": "Database error.", "time": "15 mins"},
         {"description": "New record, over 40 users.", "time": "17 mins"},

@@ -1,7 +1,7 @@
 from flask import render_template, request, Blueprint, jsonify
 from web_application import app
 import sh, json, os, subprocess
-from web_application.data.default_data import get_default_data_overview_label
+from web_application.api.default_data import get_default_data_pie_chart_overview
 from web_application.utils.data.analyze_data import analyze_data
 
 overview = Blueprint('overview', __name__)
@@ -20,13 +20,9 @@ def index():
         risks=overview_data['risks']
     )
 
-@app.route('/api/findings-data')
+@app.route('/overview/findings')
 def get_findings_data():
-    # Example data, in reality, this might come from a database or other source
-    findings_data = {
-        'labels': ['Vulnerabilities', 'Open Ports', 'Misconfigurations', 'Weak Passwords', 'Others'],
-        'data': [12, 19, 3, 5, 2]
-    }
+    findings_data = get_default_data_pie_chart_overview()
     return jsonify(findings_data)
 
 @app.route('/hidden')  # or any other appropriate route name
