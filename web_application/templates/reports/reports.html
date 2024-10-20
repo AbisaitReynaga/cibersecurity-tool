@@ -13,12 +13,7 @@
 
     <section class="preview-section">
         <h2>Report Preview</h2>
-        <div id="preview" class="report-preview">
-            <h3 id="previewTitle">{{ data.title }}</h3>
-            <p id="previewDescription">{{ data.description }}</p>
-            <h4>Additional Data:</h4>
-            <pre id="previewData">{{ data.json_data | tojson }}</pre>
-        </div>
+        {% include 'reports/report_template.html' %}
     </section>
 
 {% endblock %}
