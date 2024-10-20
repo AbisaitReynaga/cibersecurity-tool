@@ -7,6 +7,7 @@ from web_application.utils.data.analyze_data import analyze_data
 overview = Blueprint('overview', __name__)
 
 @app.route('/')
+@app.route('/overview')
 def index():
     json_file = '/home/cybersecurity-tool/web_application/data/scanning_data.json'  
     overview_data = analyze_data(json_file)
@@ -27,18 +28,14 @@ def index():
 
     return render_template(
         'overview/overview.html', 
+        findings_labels=findings_labels,
+        findings_data=findings_data,
         alive_hosts=overview_data['alive_hosts'], 
         services=overview_data['total_services'], 
         infrastructure=overview_data['infrastructure'], 
         risks=overview_data['risks'], 
-        findings_list=findings_list,
-        findings_labels=findings_labels,
-        findings_data=findings_data
+        findings_list=findings_list
     )
-
-@app.route('/overview')
-def overview():
-    return index()  
 
 @app.route('/hidden')  # or any other appropriate route name
 def hidden():

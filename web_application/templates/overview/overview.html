@@ -37,21 +37,7 @@
         </div>
     </div>
 
-    <!-- Findings Block -->
-
-    <!-- Example to include Chart.js from a CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <!-- Include the pie chart canvas -->
-    <canvas id="findingsPieChart" width="400" height="400"></canvas>
-
-    <!-- Pass data as global variables -->
-    <script>
-        //window.findingsLabels = {{ findings_labels | tojson }};
-        //window.findingsData = {{ findings_data | tojson }};
-    </script>
-    
-    <!-- Include the JavaScript file -->
-    <script src="{{ url_for('static', filename='js/findingsChart.js') }}"></script>
+    <!-- Include the Findings Block -->
+    {% include 'components/findings.html' %}
 
 {% endblock %}
