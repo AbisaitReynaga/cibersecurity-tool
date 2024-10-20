@@ -50,7 +50,6 @@ def risk_information():
 
 @app.route('/reports', methods=['GET', 'POST'])
 def reports():
-    # Initial data setup with default values
     data = {
         "date": "2024-10-19",
         "client_name": "ABC Corp",
@@ -70,30 +69,33 @@ def reports():
     }
 
     if request.method == 'POST':
-        # Fetch data from the form (including the JSON data entered by the user)
-        title = request.form.get('title')
-        description = request.form.get('description')
-        json_data = request.form.get('data')  # Get the JSON data input from the form
+        if 'save' in request.form:
+            # Handle saving the report
+            title = request.form['title']
+            description = request.form['description']
+            json_data = request.form['data']
+            data = save_report({
+                "title": title,
+                "description": description,
+                "json_data": json.loads(json_data)
+            })
+            return redirect(url_for('report'))  # Redirect after saving
+        
+        elif 'edit' in request.form:
+            # Handle editing the report (this could involve different logic)
+            data = edit_report(data)
 
-        # Validate or process the JSON data if necessary
-        try:
-            json_data = json.loads(json_data)  # Parse the JSON input if it's valid JSON
-        except ValueError:
-            json_data = None 
+        elif 'default' in request.form:
+            # Load default data
+            default_data = load_default_data()
+            data = {
+                "title": default_data['title'],
+                "description": default_data['description'],
+                "json_data": default_data['json_data']
+            }
+            return redirect(url_for('report'))  # Redirect after loading default
 
-        # Update data object with form data
-        data.update({
-            "title": title,
-            "description": description,
-            "json_data": json_data if json_data else {"error": "Invalid JSON format."}
-        })
-
-        # Return the updated page with the provided data
-        return render_template('reports/reports.html', data=data)
-
-    # Render the initial report form
     return render_template('reports/reports.html', data=data)
-
 
 @app.route('/settings')
 def settings():
