@@ -3,18 +3,9 @@
 {% block title %}Report{% endblock %}
 
 {% block content %}
-    <section class="report-section">
-        <h1>Generate Report</h1>
-        <p>Fill out the form below to create a custom report:</p>
+{% include 'reports/form_update.html' %}
+{% include 'reports/report_template.html' %}
 
-        {% include 'reports/form_update.html' %}
-
-    </section>
-
-    <section class="preview-section">
-        <h2>Report Preview</h2>
-        {% include 'reports/report_template.html' %}
-    </section>
 
 {% endblock %}
 
@@ -63,4 +54,3 @@
         }
     </script>
 {% endblock %}
-a
