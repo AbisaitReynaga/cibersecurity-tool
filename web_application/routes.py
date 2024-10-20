@@ -51,9 +51,19 @@ def risk_information():
 @app.route('/reports', methods=['GET', 'POST'])
 def reports():
     data = {
-        "date": "2024-10-20",
-        "key": "value"  # Example data; you can use real JSON data here
-    }
+        "date": "2024-10-19",
+        "client_name": "ABC Corp",
+        "methodology": {
+                "Nmap": "Used for network scanning",
+                "Nessus": "Vulnerability scanning tool"
+            },
+        "risk_scale": {
+            "Low": "Minimal risk, no immediate action needed",
+            "Medium": "Moderate risk, some action required",
+            "High": "Significant risk, immediate action recommended",
+            "Critical": "Severe risk, urgent attention required"
+        }  # Add risk_scale here
+        }
 
     if request.method == 'POST':
         # Fetch data from the form (including the JSON data entered by the user)

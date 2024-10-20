@@ -50,3 +50,5 @@ def send_email_with_attachment(pdf_file_path):
     with open(pdf_file_path, 'rb') as pdf:
         msg.attach(secure_filename(pdf_file_path), 'application/pdf', pdf.read())
     mail.send(msg)
+
+
