@@ -48,15 +48,53 @@ def domain_analyze():
 def risk_information():
     return render_template('risk_information.html')
 
+@app.route('/reports', methods=['GET', 'POST'])
+def reports():
+    # Placeholder data
+    placeholder_data = {
+        'title': 'Sample Report Title',
+        'description': 'This is a sample report description.',
+        'json_data': {"key": "value"},
+        'date': '2024-10-20',
+        'client_name': 'Client Inc.',
+        'executive_summary': 'This is a summary of the executive findings.',
+        'scope': ['Scope Item 1', 'Scope Item 2'],
+        'methodology': {'Tool 1': 'Description of Tool 1', 'Tool 2': 'Description of Tool 2'},
+        'high_risk_vulnerabilities': [
+            {'title': 'Vulnerability 1', 'description': 'Description 1', 'impact': 'High', 'recommendation': 'Fix 1'},
+        ],
+        'medium_risk_vulnerabilities': [
+            {'title': 'Vulnerability 2', 'description': 'Description 2', 'impact': 'Medium', 'recommendation': 'Fix 2'},
+        ],
+        'low_risk_vulnerabilities': [
+            {'title': 'Vulnerability 3', 'description': 'Description 3', 'impact': 'Low', 'recommendation': 'Fix 3'},
+        ],
+        'immediate_actions': ['Immediate action 1'],
+        'medium_term_actions': ['Medium-term action 1'],
+        'long_term_actions': ['Long-term action 1'],
+        'incident_response': 'Incident response details.',
+        'conclusion': 'Conclusion of the report.',
+        'risk_scale': {'High': 'Severe impact', 'Medium': 'Moderate impact', 'Low': 'Minor impact'},
+        'tools_used': ['Tool A', 'Tool B'],
+        'contact_name': 'John Doe',
+        'contact_position': 'Security Consultant',
+        'contact_organization': 'CyberSec Inc.',
+        'contact_email': 'john.doe@example.com',
+        'contact_phone': '123-456-7890'
+    }
+    
+    return render_template('reports/reports.html', data=placeholder_data)
+
 @app.route('/save_report', methods=['POST'])
 def save_report():
     title = request.form.get('title')
     description = request.form.get('description')
-    data = request.form.get('data')
+    json_data = request.form.get('data')
     
     # Process and save the report data...
     
-    return jsonify({'success': True, 'message': 'Report saved successfully!'})
+    return jsonify({'success': True, 'message': 'Report saved successfully!', 'data': json_data})
+
 
 @app.route('/settings')
 def settings():
