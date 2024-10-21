@@ -1,6 +1,12 @@
 <section class="preview-section">
     <h2>Report Preview</h2>
     <h1>Cybersecurity Audit Report</h1>
+    <h1 id="previewTitle">{{ data.title }}</h1>
+    
+    <p id="previewDescription">{{ data.description }}</p>
+    
+    <h2>Additional Data</h2>
+    <p id="previewData">{{ data.json_data }}</p>
     
     <p>Date: {{ data.date }}</p>
     <p>Client: {{ data.client_name }}</p>

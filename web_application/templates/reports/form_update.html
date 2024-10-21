@@ -23,7 +23,26 @@
             <button type="submit" name="save" id="saveButton" class="btn btn-primary">Save</button>
             <button type="submit" name="default" id="defaultButton" class="btn btn-light">Default</button>
         </div>
-        
     </form>
-    
 </section>
+
+<script>
+    document.getElementById('reportForm').onsubmit = function(event) {
+        event.preventDefault();  // Prevent form from reloading the page
+
+        let formData = new FormData(this);  // Collect form data
+
+        // Use AJAX to submit the form without refreshing the page
+        fetch('/save_report', {
+            method: 'POST',
+            body: formData
+        }).then(response => {
+            return response.json();
+        }).then(data => {
+            // Handle the response, update preview, or show a success message
+            console.log('Report saved successfully!');
+        }).catch(error => {
+            console.error('Error:', error);
+        });
+    };
+</script>

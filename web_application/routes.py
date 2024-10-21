@@ -48,54 +48,15 @@ def domain_analyze():
 def risk_information():
     return render_template('risk_information.html')
 
-@app.route('/reports', methods=['GET', 'POST'])
-def reports():
-    data = {
-        "date": "2024-10-19",
-        "client_name": "ABC Corp",
-        "title": "Default Report Title",  # Add default title
-        "description": "Default description for the report.",  # Add default description
-        "json_data": {},  # Default JSON data
-        "methodology": {
-            "Nmap": "Used for network scanning",
-            "Nessus": "Vulnerability scanning tool"
-        },
-        "risk_scale": {
-            "Low": "Minimal risk, no immediate action needed",
-            "Medium": "Moderate risk, some action required",
-            "High": "Significant risk, immediate action recommended",
-            "Critical": "Severe risk, urgent attention required"
-        },
-    }
-
-    if request.method == 'POST':
-        if 'save' in request.form:
-            # Handle saving the report
-            title = request.form['title']
-            description = request.form['description']
-            json_data = request.form['data']
-            data = save_report({
-                "title": title,
-                "description": description,
-                "json_data": json.loads(json_data)
-            })
-            return redirect(url_for('report'))  # Redirect after saving
-        
-        elif 'edit' in request.form:
-            # Handle editing the report (this could involve different logic)
-            data = edit_report(data)
-
-        elif 'default' in request.form:
-            # Load default data
-            default_data = load_default_data()
-            data = {
-                "title": default_data['title'],
-                "description": default_data['description'],
-                "json_data": default_data['json_data']
-            }
-            return redirect(url_for('report'))  # Redirect after loading default
-
-    return render_template('reports/reports.html', data=data)
+@app.route('/save_report', methods=['POST'])
+def save_report():
+    title = request.form.get('title')
+    description = request.form.get('description')
+    data = request.form.get('data')
+    
+    # Process and save the report data...
+    
+    return jsonify({'success': True, 'message': 'Report saved successfully!'})
 
 @app.route('/settings')
 def settings():
