@@ -26,6 +26,10 @@ cd web_application || { echo "Directory 'web_application' not found!"; exit 1; }
 
 # Install required packages from requirements.txt
 echo "Installing required packages..."
+
+#Uncomment when adding dependencies
+pip freeze > requirements.txt
+
 pip install -r requirements.txt
 
 # Additional setup commands can be added here

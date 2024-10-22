@@ -17,6 +17,11 @@
             <label for="data">Additional Data (JSON):</label>
             <textarea id="data" name="data" required placeholder='{"key": "value"}' oninput="updatePreview()">{{ data.json_data | tojson }}</textarea>
         </div>
+        
+        <div class="form-group">
+            <label for="email">Email Address:</label>
+            <input type="email" id="email" name="email" required placeholder="Enter your email address">
+        </div>
     
         <div class="form-actions">
             <button type="button" id="editButton" class="btn btn-secondary">Edit</button>
@@ -60,6 +65,7 @@
         event.preventDefault();  // Prevent form from reloading the page
 
         let formData = new FormData(this);  // Collect form data
+        formData.append('email', document.getElementById('email').value); 
 
         // Add the edited content to the form data
         formData.append('title', document.getElementById('editableTitle').innerText);
@@ -67,6 +73,7 @@
         formData.append('executive_summary', document.getElementById('editableSummary').innerText);
         formData.append('scope', document.getElementById('editableScope').innerText);
         formData.append('methodology', document.getElementById('editableMethodology').innerText);
+        formData.append('email', document.getElementById('email').value);
         
         // Use AJAX to submit the form without refreshing the page
         fetch('/save_report', {
@@ -75,8 +82,11 @@
         }).then(response => {
             return response.json();
         }).then(data => {
-            // Handle the response, update preview, or show a success message
-            console.log('Report saved successfully!');
+            if (data.success) {
+                alert(data.message);
+            } else {
+                alert('Failed to save report.');
+            }
         }).catch(error => {
             console.error('Error:', error);
         });
