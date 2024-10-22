@@ -19,7 +19,7 @@
         </div>
     
         <div class="form-actions">
-            <button type="submit" name="edit" id="editButton" class="btn btn-secondary">Edit</button>
+            <button type="button" id="editButton" class="btn btn-secondary">Edit</button>
             <button type="submit" name="save" id="saveButton" class="btn btn-primary">Save</button>
             <button type="submit" name="default" id="defaultButton" class="btn btn-light">Default</button>
         </div>
@@ -27,11 +27,45 @@
 </section>
 
 <script>
+    document.getElementById('editButton').addEventListener('click', function() {
+        // Get all elements that need to be made editable
+        const editableElements = [
+            document.getElementById('editableTitle'),
+            document.getElementById('editableDescription'),
+            document.getElementById('editableSummary'),
+            document.getElementById('editableScope'),
+            document.getElementById('editableMethodology')
+        ];
+        
+        // Toggle the contenteditable attribute for each section
+        editableElements.forEach(element => {
+            if (element.getAttribute('contenteditable') === 'false') {
+                element.setAttribute('contenteditable', 'true');
+            } else {
+                element.setAttribute('contenteditable', 'false');
+            }
+        });
+        
+        // Optionally change the button text to indicate "Edit Mode" or "Save Mode"
+        if (this.innerText === 'Edit') {
+            this.innerText = 'Stop Editing';
+        } else {
+            this.innerText = 'Edit';
+        }
+    });
+
     document.getElementById('reportForm').onsubmit = function(event) {
         event.preventDefault();  // Prevent form from reloading the page
 
         let formData = new FormData(this);  // Collect form data
 
+        // Add the edited content to the form data
+        formData.append('title', document.getElementById('editableTitle').innerText);
+        formData.append('description', document.getElementById('editableDescription').innerText);
+        formData.append('executive_summary', document.getElementById('editableSummary').innerText);
+        formData.append('scope', document.getElementById('editableScope').innerText);
+        formData.append('methodology', document.getElementById('editableMethodology').innerText);
+        
         // Use AJAX to submit the form without refreshing the page
         fetch('/save_report', {
             method: 'POST',

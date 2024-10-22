@@ -1,36 +1,44 @@
 <section class="preview-section">
     <h2>Report Preview</h2>
     <h1>Cybersecurity Audit Report</h1>
-    <h1 id="previewTitle">{{ data.title }}</h1>
+    <div contenteditable="false" id="editableTitle">
+        <h1>{{ data.title }}</h1>
+    </div>
     
     <p id="previewDescription">{{ data.description }}</p>
     
     <h2>Additional Data</h2>
     <p id="previewData">{{ data.json_data }}</p>
     
-    <p>Date: {{ data.date }}</p>
-    <p>Client: {{ data.client_name }}</p>
+    <div contenteditable="false" id="editableDescription">
+        <p>Date: {{ data.date }}</p>
+        <p>Client: {{ data.client_name }}</p>
+    </div>
     
     <h2>Executive Summary</h2>
-    <p>{{ data.executive_summary }}</p>
+    <div contenteditable="false" id="editableSummary">
+        <p>{{ data.executive_summary }}</p>
+    </div>
     
     <h2>Scope of the Audit</h2>
-    <ul>
+    <ul contenteditable="false" id="editableScope">
         {% for item in data.scope %}
             <li>{{ item }}</li>
         {% endfor %}
     </ul>
     
     <h2>Methodology</h2>
-    {% if data.methodology is defined %}
-        <ul>
-            {% for tool, description in data.methodology.items() %}
-                <li><strong>{{ tool }}:</strong> {{ description }}</li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No methodology details provided.</p>
-    {% endif %}
+    <div contenteditable="false" id="editableMethodology">
+        {% if data.methodology is defined %}
+            <ul>
+                {% for tool, description in data.methodology.items() %}
+                    <li><strong>{{ tool }}:</strong> {{ description }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No methodology details provided.</p>
+        {% endif %}
+    </div>
     
     <h2>Risk Assessment</h2>
     

@@ -1,0 +1,7 @@
+/* Highlight editable sections */
+.editable-highlight {
+    background-color: #f0f8ff; /* Light blue background */
+    border: 1px solid #007bff; /* Blue border */
+    padding: 5px;
+    transition: background-color 0.3s ease, border 0.3s ease; /* Smooth transition */
+}
