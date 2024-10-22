@@ -1,5 +1,6 @@
 from flask import render_template, request, Blueprint, jsonify, redirect, url_for
 from web_application import app
+from weasyprint import HTML
 import sh, json, os, subprocess
 from web_application.api.default_data import get_default_data_overview_label, get_default_data_pie_chart_overview, get_default_report_data, get_findings_list_services
 from web_application.utils.data.analyze_data import analyze_data
@@ -59,11 +60,33 @@ def reports():
 def save_report():
     title = request.form.get('title')
     description = request.form.get('description')
-    json_data = request.form.get('data')
+
+    # Add the risk_scale key to the data dictionary
+    data = {
+        'title': title,
+        'description': description,
+        'risk_scale': {
+            'Low': 'Minimal risk identified',
+            'Medium': 'Moderate risk identified',
+            'High': 'Significant risk identified'
+        }
+    }
+
+    # Render the report template with the data
+    rendered_html = render_template('reports/report_template.html', data=data)
     
-    # Process and save the report data...
+    # Define the path for the PDF output
+    output_folder = os.path.join(os.getcwd(), 'web_application', 'output')
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+
+    pdf_path = os.path.join(output_folder, f"{title}_report.pdf")
     
-    return jsonify({'success': True, 'message': 'Report saved successfully!', 'data': json_data})
+    # Generate PDF using WeasyPrint
+    HTML(string=rendered_html).write_pdf(pdf_path)
+
+    # Return success message
+    return jsonify({'success': True, 'message': f'Report saved as {pdf_path}!'})
 
 @app.route('/settings')
 def settings():

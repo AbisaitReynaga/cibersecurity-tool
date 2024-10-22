@@ -56,7 +56,6 @@
         }
     });
 
-
     document.getElementById('reportForm').onsubmit = function(event) {
         event.preventDefault();  // Prevent form from reloading the page
 
@@ -82,4 +81,26 @@
             console.error('Error:', error);
         });
     };
+
+    document.getElementById('saveButton').addEventListener('click', function(event) {
+    event.preventDefault();  // Prevent default form submission
+
+    let formData = new FormData(document.getElementById('reportForm'));
+
+    // Send form data to the backend to generate the PDF
+    fetch('/save_report', {
+        method: 'POST',
+        body: formData
+    }).then(response => response.json())
+      .then(data => {
+        if (data.success) {
+            alert(data.message);
+            console.log('PDF saved at:', data.pdf_path);
+        } else {
+            alert('Failed to save report.');
+        }
+    }).catch(error => {
+        console.error('Error:', error);
+    });
+});
 </script>
