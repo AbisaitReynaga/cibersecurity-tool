@@ -2,9 +2,11 @@
 
 {% block title %}Report{% endblock %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reports.css') }}">
+{% endblock %}
+
 {% block content %}
-{% include 'reports/form_update.html' %}
-{% include 'reports/report_template.html' %}
-
-
+    {% include 'reports/form_update.html' %}
+    {% include 'reports/report_template.html' %}
 {% endblock %}

@@ -37,12 +37,14 @@
             document.getElementById('editableMethodology')
         ];
         
-        // Toggle the contenteditable attribute for each section
+        // Toggle the contenteditable attribute and highlight class for each section
         editableElements.forEach(element => {
             if (element.getAttribute('contenteditable') === 'false') {
                 element.setAttribute('contenteditable', 'true');
+                element.classList.add('editable-highlight'); // Add highlight class
             } else {
                 element.setAttribute('contenteditable', 'false');
+                element.classList.remove('editable-highlight'); // Remove highlight class
             }
         });
         
@@ -53,6 +55,7 @@
             this.innerText = 'Edit';
         }
     });
+
 
     document.getElementById('reportForm').onsubmit = function(event) {
         event.preventDefault();  // Prevent form from reloading the page
