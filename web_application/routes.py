@@ -103,7 +103,6 @@ def save_report():
     # Return success message
     return jsonify({'success': True, 'message': f'Report saved as {pdf_path} and emailed to {email}!'})
 
-
 @app.route('/settings')
 def settings():
     return render_template('settings.html')
