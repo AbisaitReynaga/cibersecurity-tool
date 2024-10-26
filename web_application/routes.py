@@ -1,7 +1,7 @@
 from flask import render_template, request, Blueprint, jsonify, redirect, url_for
 from web_application import app
-from web_application import run
-from flask_mail import Mail, Message
+from flask_mail import Message
+from mail import mail
 from weasyprint import HTML
 from web_application.api.default_data import get_default_data_overview_label, get_default_data_pie_chart_overview, get_default_report_data, get_findings_list_services
 from web_application.utils.data.analyze_data import analyze_data
@@ -98,7 +98,7 @@ def save_report():
 
     with app.open_resource(pdf_path) as pdf:
         msg.attach(f'{title}_report.pdf', 'application/pdf', pdf.read())
-    run.mail.send(msg)
+    mail.send(msg)
 
     # Return success message
     return jsonify({'success': True, 'message': f'Report saved as {pdf_path} and emailed to {email}!'})
