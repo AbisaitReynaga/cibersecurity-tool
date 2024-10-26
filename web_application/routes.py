@@ -60,9 +60,9 @@ def reports():
 
 @app.route('/save_report', methods=['POST'])
 def save_report():
-    title = request.form.get('title')
+    title       = request.form.get('title')
     description = request.form.get('description')
-    email = request.form.get('email') 
+    email       = request.form.get('email') 
 
     # Add the risk_scale key to the data dictionary
     data = {
@@ -84,12 +84,14 @@ def save_report():
         os.makedirs(output_folder)
 
     pdf_path = os.path.join(output_folder, f"{title}_report.pdf")
-    
-    # Generate PDF using WeasyPrint
     HTML(string=rendered_html).write_pdf(pdf_path)
 
      # Send the email with the PDF attachment
-    msg = Message('Your Report is Ready', sender='your-email@example.com', recipients=[email])
+    msg = Message(
+        'Your Report is Ready',
+        sender=app.config['MAIL_USERNAME'],  # Match configured sender email
+        recipients=[email]
+    )
     msg.body = "Please find your report attached."
     with app.open_resource(pdf_path) as pdf:
         msg.attach(f'{title}_report.pdf', 'application/pdf', pdf.read())
