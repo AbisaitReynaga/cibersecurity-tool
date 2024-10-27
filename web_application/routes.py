@@ -1,7 +1,6 @@
 from flask import render_template, request, Blueprint, jsonify, redirect, url_for
-from web_application import app
+from web_application import app, mail
 from flask_mail import Message
-from mail import mail
 from weasyprint import HTML
 from web_application.api.default_data import get_default_data_overview_label, get_default_data_pie_chart_overview, get_default_report_data, get_findings_list_services
 from web_application.utils.data.analyze_data import analyze_data
@@ -77,7 +76,7 @@ def save_report():
 
     # Render the report template with the data
     rendered_html = render_template('reports/report_template.html', data=data)
-    
+
     # Define the path for the PDF output
     output_folder = os.path.join(os.getcwd(), 'web_application', 'output')
     if not os.path.exists(output_folder):
@@ -86,22 +85,24 @@ def save_report():
     pdf_path = os.path.join(output_folder, f"{title}_report.pdf")
     HTML(string=rendered_html).write_pdf(pdf_path)
 
-     # Send the email with the PDF attachment
-    from flask_mail import Message
-
     msg = Message(
         subject="Report",
         sender='a20310068@ceti.mx', 
         recipients=[request.form.get('email')], 
-        body='Hello, this is a test email.')
+        body='Hello, this is a test email.'
+    )
     msg.body = "This is the email body"
 
     with app.open_resource(pdf_path) as pdf:
         msg.attach(f'{title}_report.pdf', 'application/pdf', pdf.read())
-    mail.send(msg)
 
     # Return success message
-    return jsonify({'success': True, 'message': f'Report saved as {pdf_path} and emailed to {email}!'})
+    try:
+        mail.send(msg)
+        return jsonify({'success': True, 'message': f'Report saved as {pdf_path} and emailed to {email}!'})
+    except Exception as e:
+        print(f"Failed to send email: {e}")
+        return jsonify({'success': False, 'message': 'Error sending email'}), 500
 
 @app.route('/settings')
 def settings():
