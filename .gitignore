@@ -1,6 +1,7 @@
 # Ignore virtual environments
-my-venv/
+venv/
 virtual_enviroment
+.env
 
 # Ignore application runtime files
 run_application

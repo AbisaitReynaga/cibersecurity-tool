@@ -1,0 +1,39 @@
+<!-- Table for Services -->
+<h2>Service Findings</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Icono</th>
+            <th>Servicio</th>
+            <th>Numero</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for service in findings_services %}
+        <tr>
+            <td><img src="{{ url_for('static', filename=service.icon) }}" alt="{{ service.title }} icon" width="24" height="24"></td>
+            <td>{{ service.title }}</td>
+            <td>{{ service.number }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- You can add CSS styles for the table to make it look better -->
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    img {
+        vertical-align: middle;
+    }
+</style>

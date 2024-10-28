@@ -1,10 +1,16 @@
-<header class="w3-container" style="padding-top:22px">
-  <h5><b><i class="fa fa-dashboard"></i> Page Title</b></h5>
-    <!-- Top container -->
-    <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
-        <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i> &nbsp;Menu</button>
-        <span class="w3-bar-item w3-right">
-          <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" style="height:40px;">
-        </span>
-      </div>
+<header class="w3-container" style="padding: 0; width: 100%;">
+  <h5 style="margin: 0;"><b><i class="fa fa-dashboard"></i> {% block page_title %}Page Title{% endblock %}</b></h5>
+  <div class="w3-bar w3-top w3-black w3-large" style="z-index:4; width: 100%;">
+    <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();">
+        <i class="fa fa-bars"></i> &nbsp;Menu
+    </button>
+    <span class="w3-bar-item">
+      <a href="{{ url_for('hidden') }}" style="display: inline-block;">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" style="max-height: 50px; vertical-align: middle;">
+      </a>      
+    </span>
+    <span class="w3-bar-item w3-right" style="color: white; padding: 14px 16px;">
+        <h5 class="w3-bar-item" style="margin: 0;">Empresa Ciber Segura</h5>
+    </span>
+  </div>
 </header>

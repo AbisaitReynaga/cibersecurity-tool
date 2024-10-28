@@ -1,8 +1,10 @@
-import sys
 import os
+import sys
+from flask import Flask
 
-# Add the parent directory to sys.path so Python can find 'utils'
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+app = Flask(__name__)
 
 from web_application import app
 
