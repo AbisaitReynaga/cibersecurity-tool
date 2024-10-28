@@ -1,0 +1,132 @@
+<section class="preview-section">
+    <h2>Report Preview</h2>
+    <h1>Cybersecurity Audit Report</h1>
+    <div contenteditable="false" id="editableTitle">
+        <h1>{{ data.title }}</h1>
+    </div>
+    
+    <p id="previewDescription">{{ data.description }}</p>
+    
+    <h2>Additional Data</h2>
+    <p id="previewData">{{ data.json_data }}</p>
+    
+    <div contenteditable="false" id="editableDescription">
+        <p>Date: {{ data.date }}</p>
+        <p>Client: {{ data.client_name }}</p>
+    </div>
+    
+    <h2>Executive Summary</h2>
+    <div contenteditable="false" id="editableSummary">
+        <p>{{ data.executive_summary }}</p>
+    </div>
+    
+    <h2>Scope of the Audit</h2>
+    <ul contenteditable="false" id="editableScope">
+        {% for item in data.scope %}
+            <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+    
+    <h2>Methodology</h2>
+    <div contenteditable="false" id="editableMethodology">
+        {% if data.methodology is defined %}
+            <ul>
+                {% for tool, description in data.methodology.items() %}
+                    <li><strong>{{ tool }}:</strong> {{ description }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No methodology details provided.</p>
+        {% endif %}
+    </div>
+    
+    <h2>Risk Assessment</h2>
+    
+    <h3>High-Risk Vulnerabilities</h3>
+    <ul>
+        {% for vulnerability in data.high_risk_vulnerabilities %}
+            <li>
+                <strong>{{ vulnerability.title }}</strong><br>
+                <em>Description:</em> {{ vulnerability.description }}<br>
+                <em>Impact:</em> {{ vulnerability.impact }}<br>
+                <em>Recommendation:</em> {{ vulnerability.recommendation }}
+            </li>
+        {% endfor %}
+    </ul>
+    
+    <h3>Medium-Risk Vulnerabilities</h3>
+    <ul>
+        {% for vulnerability in data.medium_risk_vulnerabilities %}
+            <li>
+                <strong>{{ vulnerability.title }}</strong><br>
+                <em>Description:</em> {{ vulnerability.description }}<br>
+                <em>Impact:</em> {{ vulnerability.impact }}<br>
+                <em>Recommendation:</em> {{ vulnerability.recommendation }}
+            </li>
+        {% endfor %}
+    </ul>
+    
+    <h3>Low-Risk Vulnerabilities</h3>
+    <ul>
+        {% for vulnerability in data.low_risk_vulnerabilities %}
+            <li>
+                <strong>{{ vulnerability.title }}</strong><br>
+                <em>Description:</em> {{ vulnerability.description }}<br>
+                <em>Impact:</em> {{ vulnerability.impact }}<br>
+                <em>Recommendation:</em> {{ vulnerability.recommendation }}
+            </li>
+        {% endfor %}
+    </ul>
+    
+    <h2>Recommendations</h2>
+    <h3>Immediate Actions (within 30 days)</h3>
+    <ul>
+        {% for action in data.immediate_actions %}
+            <li>{{ action }}</li>
+        {% endfor %}
+    </ul>
+    
+    <h3>Medium-Term Actions (30-90 days)</h3>
+    <ul>
+        {% for action in data.medium_term_actions %}
+            <li>{{ action }}</li>
+        {% endfor %}
+    </ul>
+    
+    <h3>Long-Term Actions (90+ days)</h3>
+    <ul>
+        {% for action in data.long_term_actions %}
+            <li>{{ action }}</li>
+        {% endfor %}
+    </ul>
+    
+    <h2>Incident Response and Recovery</h2>
+    <p>{{ data.incident_response }}</p>
+    
+    <h2>Conclusion</h2>
+    <p>{{ data.conclusion }}</p>
+    
+    <h2>Appendices</h2>
+    
+    <h3>Appendix A: Risk Rating Scale</h3>
+    <ul>
+        {% for risk_level, description in data.risk_scale.items() %}
+            <li><strong>{{ risk_level }}:</strong> {{ description }}</li>
+        {% endfor %}
+    </ul>
+    
+    <h3>Appendix B: Tools Used</h3>
+    <ul>
+        {% for tool in data.tools_used %}
+            <li>{{ tool }}</li>
+        {% endfor %}
+    </ul>
+    
+    <h2>Contact Information</h2>
+    <p>For further details or to schedule follow-up audits, please contact:</p>
+    <p>{{ data.contact_name }}<br>
+    {{ data.contact_position }}<br>
+    {{ data.contact_organization }}<br>
+    Email: {{ data.contact_email }}<br>
+    Phone: {{ data.contact_phone }}</p>
+</section>

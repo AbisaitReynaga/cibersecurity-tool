@@ -1,0 +1,17 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <h1>Overview</h1>
+
+    <!-- Include the Card Strip Block -->
+    {% include 'overview/infostrip.html' %}
+
+    <!-- Include the Findings Block -->
+    {% include 'overview/findings.html' %}
+
+    <!-- Include the Card Strip Block -->
+    {% include 'overview/findings_table.html' %}
+
+{% endblock %}

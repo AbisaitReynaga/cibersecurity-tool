@@ -1,4 +1,3 @@
-<!-- templates/layout/base.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,41 +6,71 @@
     <title>{% block title %}Webserver Auditorias Web{% endblock %}</title>
     <style>
         html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+        /* Ensure the body takes up full height */
+        html, body {
+            height: 100%;
+        }
+        /* Container for main content and sidebar */
+        .wrapper {
+            display: flex;
+            min-height: 100vh; /* Full viewport height */
+            flex-direction: column;
+        }
+        /* Main content should grow to fill available space */
+        .w3-main {
+            flex-grow: 1;
+            margin-left: 300px; /* Adjust to your sidebar width */
+            margin-top: 43px;
+        }
+        /* Sidebar fixed to the left */
+        .w3-sidebar {
+            position: fixed;
+            width: 300px;
+            height: 100%; /* Full height */
+            top: 0;
+            left: 0;
+        }
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 1em;
+            background-color: #f1f1f1;
+        }
     </style>
-
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <!-- Link to the main stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 
+    <!-- Block for extra CSS files -->
+    {% block extra_css %}{% endblock %}
 
     <!-- Use Flask-Bootstrap's pre-included CSS -->
     {{ bootstrap.load_css() }}
 </head>
 
 <body class="w3-light-grey">
-    <header class="bg-primary text-white text-center py-4">
-        <h1>Webserver Auditorias Web</h1>
-    </header>
+    <div class="wrapper">
+        {% include 'layout/header.html' %}
+        {% include 'layout/sidebar.html' %}
 
-    <!-- Include the Sidebar -->
-    {% include 'layout/sidebar.html' %}
+        <!-- Main content area -->
+        <div class="w3-main">
+            <main class="container my-5">
+                {% block content %}
+                <!-- Default Content -->
+                {% endblock %}
+            </main>
+        </div>
 
-
-    <div class="w3-main" style="margin-left:300px;margin-top:43px;">
-        <main class="container my-5">
-            {% block content %}
-            <!-- Default Content -->
-            {% endblock %}
-        </main>
+        <!-- Footer should always be visible at the bottom -->
+        {% include 'layout/footer.html' %}
     </div>
-
-    <footer class="bg-dark text-white text-center py-3">
-        <p>&copy; 2024 Webserver Auditorias Web</p>
-    </footer> 
-
 
     <!-- Use Flask-Bootstrap's pre-included JS -->
     {{ bootstrap.load_js() }}
 </body>
-
 </html>

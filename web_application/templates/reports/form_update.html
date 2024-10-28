@@ -1,0 +1,116 @@
+<section class="report-section">
+    <h1>Generate Report</h1>
+    <p>Fill out the form below to create a custom report:</p>
+    
+    <form method="POST" id="reportForm" class="report-form">
+        <div class="form-group">
+            <label for="title">Report Title:</label>
+            <input type="text" id="title" name="title" required placeholder="Enter report title" value="{{ data.title }}" oninput="updatePreview()">
+        </div>
+    
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required placeholder="Enter report description" oninput="updatePreview()">{{ data.description }}</textarea>
+        </div>
+    
+        <div class="form-group">
+            <label for="data">Additional Data (JSON):</label>
+            <textarea id="data" name="data" required placeholder='{"key": "value"}' oninput="updatePreview()">{{ data.json_data | tojson }}</textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Email Address:</label>
+            <input type="email" id="email" name="email" required placeholder="Enter your email address">
+        </div>
+    
+        <div class="form-actions">
+            <button type="button" id="editButton" class="btn btn-secondary">Edit</button>
+            <button type="submit" name="save" id="saveButton" class="btn btn-primary">Save</button>
+            <button type="submit" name="default" id="defaultButton" class="btn btn-light">Default</button>
+        </div>
+    </form>
+</section>
+
+<script>
+    document.getElementById('editButton').addEventListener('click', function() {
+        // Get all elements that need to be made editable
+        const editableElements = [
+            document.getElementById('editableTitle'),
+            document.getElementById('editableDescription'),
+            document.getElementById('editableSummary'),
+            document.getElementById('editableScope'),
+            document.getElementById('editableMethodology')
+        ];
+        
+        // Toggle the contenteditable attribute and highlight class for each section
+        editableElements.forEach(element => {
+            if (element.getAttribute('contenteditable') === 'false') {
+                element.setAttribute('contenteditable', 'true');
+                element.classList.add('editable-highlight'); // Add highlight class
+            } else {
+                element.setAttribute('contenteditable', 'false');
+                element.classList.remove('editable-highlight'); // Remove highlight class
+            }
+        });
+        
+        // Optionally change the button text to indicate "Edit Mode" or "Save Mode"
+        if (this.innerText === 'Edit') {
+            this.innerText = 'Stop Editing';
+        } else {
+            this.innerText = 'Edit';
+        }
+    });
+
+    document.getElementById('reportForm').onsubmit = function(event) {
+        event.preventDefault();  // Prevent form from reloading the page
+
+        let formData = new FormData(this);  // Collect form data
+        formData.append('email', document.getElementById('email').value); 
+
+        // Add the edited content to the form data
+        formData.append('title', document.getElementById('editableTitle').innerText);
+        formData.append('description', document.getElementById('editableDescription').innerText);
+        formData.append('executive_summary', document.getElementById('editableSummary').innerText);
+        formData.append('scope', document.getElementById('editableScope').innerText);
+        formData.append('methodology', document.getElementById('editableMethodology').innerText);
+        formData.append('email', document.getElementById('email').value);
+        
+        // Use AJAX to submit the form without refreshing the page
+        fetch('/save_report', {
+            method: 'POST',
+            body: formData
+        }).then(response => {
+            return response.json();
+        }).then(data => {
+            if (data.success) {
+                alert(data.message);
+            } else {
+                alert('Failed to save report.');
+            }
+        }).catch(error => {
+            console.error('Error:', error);
+        });
+    };
+
+    document.getElementById('saveButton').addEventListener('click', function(event) {
+    event.preventDefault();  // Prevent default form submission
+
+    let formData = new FormData(document.getElementById('reportForm'));
+
+    // Send form data to the backend to generate the PDF
+    fetch('/save_report', {
+        method: 'POST',
+        body: formData
+    }).then(response => response.json())
+      .then(data => {
+        if (data.success) {
+            alert(data.message);
+            console.log('PDF saved at:', data.pdf_path);
+        } else {
+            alert('Failed to save report.');
+        }
+    }).catch(error => {
+        console.error('Error:', error);
+    });
+});
+</script>
