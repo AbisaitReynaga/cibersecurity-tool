@@ -1,13 +1,13 @@
 #!/bin/bash
 
-CONFIG_FILE=/home/cybersecurity-tool/data/config.json
-DATA_FILE=/home/cybersecurity-tool/data/scanning_data.json
+CONFIG_FILE=/home/cibersecurity-tool/web_application/data/config.json
+DATA_FILE=/home/cibersecurity-tool/web_application/data/scanning_data.json
 
 
 NETWORK=$(cat $CONFIG_FILE | jq -r '.network')
 NETMASK=$(cat $CONFIG_FILE | jq -r '.netmask')
-sudo nmap -sn $NETWORK/$NETMASK | grep "Nmap scan report for" | awk '{print $5}' > /home/cybersecurity-tool/aliveHosts.txt
-sudo nmap -sV -iL /home/cybersecurity-tool/aliveHosts.txt | awk '
+sudo nmap -sn $NETWORK/$NETMASK | grep "Nmap scan report for" | awk '{print $5}' > /home/cibersecurity-tool/web_application/data/aliveHosts.txt
+sudo nmap -sV -iL /home/cibersecurity-tool/web_application/data/aliveHosts.txt | awk '
 /Nmap scan report for/ {
     if (host != "") {
         # Cierra el JSON del host anterior y agrega la MAC y OS si existen
@@ -58,10 +58,10 @@ END {
         }
         print json_host "}"
     }
-}' > /home/cybersecurity-tool/temp.json
+}' >  /home/cibersecurity-tool/web_application/data/temp.json
 
 echo "[" > $DATA_FILE
-cat /home/cybersecurity-tool/temp.json >> $DATA_FILE
+cat  /home/cibersecurity-tool/web_application/data/temp.json >> $DATA_FILE
 echo "]" >> $DATA_FILE
 
 

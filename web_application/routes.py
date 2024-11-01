@@ -11,7 +11,7 @@ overview = Blueprint('overview', __name__)
 @app.route('/')
 @app.route('/overview')
 def index():
-    json_file = '/home/cybersecurity-tool/web_application/data/scanning_data.json'  
+    json_file = '/home/cibersecurity-tool/web_application/data/scanning_data.json'  
     # overview_data = analyze_data(json_file)
     overview_data = get_default_data_overview_label()
     findings_services = get_findings_list_services()  
@@ -33,10 +33,31 @@ def get_findings_data():
 @app.route('/hidden')  # or any other appropriate route name
 def hidden():
     return render_template('index.html')
-
 @app.route('/gattering_information')
 def gattering_information():
-    return render_template('gattering_information.html')
+    return render_template('/scanning/gattering_information.html')
+@app.route('/view_cves', methods=['POST'])
+def view_cve():
+    config_file_path = '/home/cibersecurity-tool/web_application/data/cve_vulnerabilities.json'
+    if not os.path.exists(config_file_path):
+        return render_template('gattering_information.html', 
+                               data={}, 
+                               alert_message="CVE file is missing. Please perform a scanning.")
+    with open(config_file_path, 'r') as f:
+        data = json.load(f)
+    return render_template('/scanning/view_cve.html', data=data)
+
+@app.route('/view_scanning', methods=['POST'])
+def view_scanning():
+    config_file_path = '/home/cibersecurity-tool/web_application/data/scanning_data.json'
+    if not os.path.exists(config_file_path):
+        return render_template('gattering_information.html', 
+                               data={}, 
+                               alert_message="Host data file is missing. Please perform a scanning.")
+    with open(config_file_path, 'r') as f:
+        data = json.load(f)
+    return render_template('/scanning/view_scanning.html', data=data)
+
 
 @app.route('/traffic_analyze')
 def traffic_analyze():
@@ -111,23 +132,33 @@ def settings():
 # Custom routes 
 @app.route('/load_data', methods=['POST'])
 def load_data():
-    config_file_path = '/home/cybersecurity-tool/data/config.json'
+    config_file_path = '/home/cibersecurity-tool/web_application/data/config.json'
     if not os.path.exists(config_file_path):
-        return render_template('gattering_information.html', 
-                                data={}, 
-                                alert_message="Organization configuration is missing. Please configure the organization.")
+        return render_template(
+            'gattering_information.html', 
+            data={}, 
+            alert_message="Organization configuration is missing. Please configure the organization."
+        )
 
-    script_path = '/home/cybersecurity-tool/host_discover_scripts/host_discovery.sh'
+    scanning_path = '/home/cibersecurity-tool/web_application/scripts/host_discover_scripts/host_discovery.sh'
+    search_cve_path = '/home/cibersecurity-tool/web_application/scripts/search_cve.sh'
+    
     try:
-        subprocess.run(['/bin/bash', script_path], check=True)
+        subprocess.run(['/bin/bash', scanning_path], check=True)
+        subprocess.run(['/bin/bash', search_cve_path], check=True)
     except subprocess.CalledProcessError as e:
-        return render_template('gattering_information.html',
-                                data={},
-                                alert_message=f"Error while executing the script: {e}")
+        return render_template(
+            'gattering_information.html',
+            data={},
+            alert_message=f"Error while executing the script: {e}"
+        )
 
-    with open('/home/cybersecurity-tool/data/scanning_data.json', 'r') as f:
+    with open('/home/cibersecurity-tool/web_application/data/scanning_data.json', 'r') as f:
         data = json.load(f)
-    return render_template('gattering_information.html',data=data)
+    
+    return render_template('gattering_information.html', data=data)
+
+
 
 @app.route('/save_organization_data', methods=['POST'])
 def save_data():
@@ -145,7 +176,7 @@ def save_data():
         "domain": request.form.get("domain")
     }
 
-    json_file_path = os.path.join("data", "config.json")
+    json_file_path = os.path.join("/home/cibersecurity-tool/web_application/data", "config.json")
 
     with open(json_file_path, 'w') as json_file:
         json.dump(data, json_file, indent=4)
