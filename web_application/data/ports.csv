@@ -1,0 +1,46 @@
+Puerto,Descripcion,Recomendacion
+21/tcp,"Conexiones a servidores FTP en su canal de control, salvo que se cambie el puerto de escucha de FTP o FTPES.",Considera deshabilitarlo o limitar el acceso a usuarios especificos debido a su falta de cifrado en conexiones FTP. Utiliza FTPS para mayor seguridad.
+22/tcp,"Conexiones seguras SSH y SFTP, salvo que se cambie el puerto de escucha de SSH.",Asegurate de que solo este accesible desde redes confiables y deshabilita el acceso por contrasena en favor de autenticacion por clave. Cambia el puerto por defecto si es posible.
+23/tcp,"Telnet, para conexion remota con otro equipo mediante linea de comandos. No seguro, ya que envia autenticacion y datos sin cifrar.","Deshabilita Telnet, ya que no es seguro. Utiliza SSH en su lugar para conexiones remotas seguras."
+25/tcp,"Protocolo SMTP para envio de correos electronicos, aunque tambien puede usar los puertos 26 y 2525.",Asegurate de que el servidor de correo este configurado para evitar el envio de spam y considera el uso de SMTP autenticado.
+53/tcp,Servicio DNS (Domain Name System).,Limita el acceso al servicio DNS y utiliza DNSSEC para mejorar la seguridad.
+80/tcp,Navegacion web no segura (HTTP).,Redirige el trafico HTTP al puerto 443 (HTTPS) para cifrar las conexiones.
+101/tcp,Servicio Hostname para identificar el nombre de los equipos.,Limita su uso solo a redes internas de confianza.
+110/tcp,Usado por gestores de correo electronico para conexion con el protocolo POP3.,Considera usar el puerto 995 (POP3 SSL) para conexiones seguras.
+123/tcp,Utilizado por NTP (Protocolo de tiempo en red) para sincronizar dispositivos en Internet.,Asegurate de que los dispositivos NTP esten correctamente configurados y limita el acceso a redes internas de confianza.
+137/tcp,"Utilizados por el Protocolo NetBIOS o NBT, muy comun en redes de Windows.",Evita exponer estos puertos a Internet. Utilizalos solo en redes internas o de confianza.
+139/tcp,"Utilizados por el Protocolo NetBIOS o NBT, muy comun en redes de Windows.",Evita exponer estos puertos a Internet. Utilizalos solo en redes internas o de confianza.
+139/tcp,"Utilizados por el Protocolo NetBIOS o NBT, muy comun en redes de Windows.",Evita exponer estos puertos a Internet. Utilizalos solo en redes internas o de confianza.
+143/tcp,Usado por el protocolo IMAP en gestores de correo electronico.,Considera el uso de IMAP SSL (puerto 993) para asegurar la conexion de correo.
+179/tcp,"Protocolo de puerta de enlace fronteriza (BGP), utilizado en redes para mantener tablas de enrutamiento.",Limita el acceso a redes confiables y utiliza autenticacion en BGP si es posible.
+194/tcp,Usado por Internet Relay Chat (IRC).,"Evalua si realmente necesitas IRC en tu red, ya que este protocolo se usa menos."
+443/tcp,"Navegacion web segura (HTTPS), utiliza TLS.","Asegurate de contar con certificados SSL/TLS actualizados y configuraciones de seguridad (HSTS, certificados validos, etc.)."
+445/tcp,"Usado por varios servicios, entre ellos Active Directory.","Limita su uso a redes internas y de confianza, ya que puede ser un punto de entrada para ataques como el ransomware."
+515/tcp,Utilizado para el servicio de impresion en red en los sistemas operativos Windows.,Asegurar con una contrasena el panel de control y conectarla en redes internas o de confianza.
+587/tcp,Protocolo SMTP SSL para envio seguro de correos electronicos.,Asegurate de que el servidor de correo este bien configurado y protegido para evitar el uso indebido.
+591/tcp,Usado por Filemaker como alternativa al puerto HTTP (80).,"Si no utilizas Filemaker, manten este puerto cerrado para evitar posibles riesgos."
+853/tcp,Utilizado por DNS over TLS.,Utiliza DNS over TLS en lugar de DNS sin cifrar siempre que sea posible.
+990/tcp,Utilizado por FTPS (FTP Implicito).,Asegurate de que solo usuarios autorizados tengan acceso a FTPS y manten el software actualizado.
+993/tcp,Usado por IMAP SSL para conexion segura en gestores de correo electronico.,Utiliza IMAP SSL siempre que sea posible para conexiones de correo seguras.
+995/tcp,Para conexion segura en POP3 SSL en gestores de correo electronico.,Asegurate de que los usuarios accedan solo mediante POP3 SSL para proteger sus credenciales.
+1194/tcp,Utilizado por OpenVPN para redes privadas virtuales (VPN).,Asegurate de que la configuracion de OpenVPN este correctamente configurada y solo permite conexiones de usuarios autorizados.
+1723/tcp,Usado por el protocolo VPN PPTP.,"Considera cambiar a un protocolo VPN mas seguro, como OpenVPN o IKEv2, ya que PPTP tiene vulnerabilidades conocidas."
+1812/tcp,Usado para autenticar clientes en un servidor RADIUS.,Limita el acceso a redes de confianza y manten el servidor RADIUS actualizado.
+1813/tcp,Usado para accounting en un servidor RADIUS.,Protege este puerto y solo permite conexiones desde dispositivos confiables.
+2049/tcp,Utilizado por el protocolo NFS para intercambio de archivos en red local o en Internet.,Asegurate de que el acceso al servicio NFS este restringido a redes de confianza y manten el software actualizado.
+2082/2083/tcp,"Utilizado por CMS cPanel para gestion de servidores, dependiendo de si se usa HTTP o HTTPS.",Usa siempre HTTPS (2083) para acceso seguro y verifica las configuraciones de seguridad en cPanel.
+3074/tcp,Usado por el servicio online de videojuegos Xbox Live.,Limita este puerto a consolas y redes confiables para reducir el riesgo de ataques externos.
+3306/tcp,Utilizado por bases de datos MySQL.,Limita el acceso a MySQL solo a redes de confianza y cambia las credenciales de usuario por defecto.
+3389/tcp,Utilizado por el escritorio remoto de Windows (recomendable cambiarlo),Cambia el puerto por defecto si es posible y habilita autenticacion multifactor para conexiones de escritorio remoto.
+4662/4672/tcp,"Utilizados por el programa eMule, que es un programa para descargar archivos de todo tipo mediante intercambio de archivos P2P.",Utiliza conexiones seguras si el programa lo permite y evita compartir informacion sensible mediante programas de intercambio de archivos.
+4899/tcp,"Utilizado por Radmin, un programa para control remoto de equipos.",Configura el acceso a Radmin solo para redes internas o de confianza y utiliza autenticacion segura.
+5000/tcp,"Puerto de control del protocolo UPnP. Por seguridad, se recomienda desactivarlo en el router, ya que puede ser un punto vulnerable en la red.",Desactiva UPnP en el router y solo habilitalo si es absolutamente necesario.
+5900/tcp,"Usados por el programa VNC (Virtual Network Computing), que permite el control remoto de equipos.",Limita el acceso a VNC mediante contrasenas fuertes y usa solo redes internas para evitar accesos no autorizados.
+5901/tcp,"Usados por el programa VNC (Virtual Network Computing), que permite el control remoto de equipos.",Limita el acceso a VNC mediante contrasenas fuertes y usa solo redes internas para evitar accesos no autorizados.
+5902/tcp,"Usados por el programa VNC (Virtual Network Computing), que permite el control remoto de equipos.",Limita el acceso a VNC mediante contrasenas fuertes y usa solo redes internas para evitar accesos no autorizados.
+5903/tcp,"Usados por el programa VNC (Virtual Network Computing), que permite el control remoto de equipos.",Limita el acceso a VNC mediante contrasenas fuertes y usa solo redes internas para evitar accesos no autorizados.
+5904/tcp,"Usados por el programa VNC (Virtual Network Computing), que permite el control remoto de equipos.",Limita el acceso a VNC mediante contrasenas fuertes y usa solo redes internas para evitar accesos no autorizados.
+5905/tcp,"Usados por el programa VNC (Virtual Network Computing), que permite el control remoto de equipos.",Limita el acceso a VNC mediante contrasenas fuertes y usa solo redes internas para evitar accesos no autorizados.
+6881/6969/tcp,Utilizados por el programa BitTorrent para la descarga e intercambio de archivos.,"Si usas BitTorrent, configura limites de acceso y considera el uso de VPN para proteger tu privacidad."
+8080/tcp,Puerto alternativo al 80 TCP para servidores web. Generalmente se usa en entornos de prueba o para configuraciones de servicios web paralelos.,Usa HTTPS en lugar de HTTP si es posible y limita el acceso a entornos de prueba.
+51400/tcp,Usado por el programa Transmission para descargar archivos a traves de la red BitTorrent,Considera usar una VPN para descargas de archivos y evita exponer este puerto a redes publicas para proteger la privacidad.

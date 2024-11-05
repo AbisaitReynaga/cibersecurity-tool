@@ -1,0 +1,631 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Reporte de Infraestructura</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <style>
+            body { font-family: 'Arial', sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; }
+            h1, h2 { color: #2c3e50; }
+            table { width: 100%; border-collapse: collapse; margin-bottom: 20px; background: white; }
+            th, td { border: 1px solid #bdc3c7; padding: 8px; text-align: left; }
+            th { background-color: #2c3e50; color: white; }
+            tr:nth-child(even) { background: #ecf0f1; }
+            tr:hover { background: #dfe6e9; }
+            .chart-container { width: 100%; height: 400px; margin-bottom: 30px; }
+            footer { margin-top: 20px; font-size: 12px; color: #7f8c8d; }
+        </style>
+    </head>
+    <body>
+	<a href="/reported">
+        <h1>Reporte de Infraestructura</h1>
+	</a>
+        <h2>Resumen General</h2>
+        <p>Este informe proporciona un analisis detallado de los servicios detectados en la infraestructura de la red. Incluye informacion sobre los puertos abiertos, servicios asociados y recomendaciones para mejorar la seguridad de la red.</p>
+        
+        <h2>Servicios Utilizados</h2>
+        <table>
+            <tr>
+                <th>Servicio</th>
+                <th>Puerto</th>
+                <th># Ocurrencia</th>
+                <th>Descripcion</th>
+            </tr>
+    
+            <tr>
+                <td>domain</td>
+                <td>53/tcp</td>
+                <td>1</td>
+                <td>Servicio DNS (Domain Name System).</td>
+            </tr>
+        
+            <tr>
+                <td>ssh</td>
+                <td>22/tcp</td>
+                <td>2</td>
+                <td>Conexiones seguras SSH y SFTP, salvo que se cambie el puerto de escucha de SSH.</td>
+            </tr>
+        
+            <tr>
+                <td>netbios-ssn</td>
+                <td>139/tcp</td>
+                <td>2</td>
+                <td>Utilizados por el Protocolo NetBIOS o NBT, muy comun en redes de Windows.</td>
+            </tr>
+        
+            <tr>
+                <td>netbios-ssn</td>
+                <td>445/tcp</td>
+                <td>1</td>
+                <td>Usado por varios servicios, entre ellos Active Directory.</td>
+            </tr>
+        
+            <tr>
+                <td>vnc</td>
+                <td>5901/tcp</td>
+                <td>1</td>
+                <td>Usados por el programa VNC (Virtual Network Computing), que permite el control remoto de equipos.</td>
+            </tr>
+        
+            <tr>
+                <td>http</td>
+                <td>80/tcp</td>
+                <td>9</td>
+                <td>Navegacion web no segura (HTTP).</td>
+            </tr>
+        
+            <tr>
+                <td>ssl/http</td>
+                <td>443/tcp</td>
+                <td>1</td>
+                <td>Navegacion web segura (HTTPS), utiliza TLS.</td>
+            </tr>
+        
+            <tr>
+                <td>ssl/https?</td>
+                <td>443/tcp</td>
+                <td>3</td>
+                <td>Navegacion web segura (HTTPS), utiliza TLS.</td>
+            </tr>
+        
+            <tr>
+                <td>rtsp</td>
+                <td>554/tcp</td>
+                <td>3</td>
+                <td>Utilizado por posible dispositivo IoT</td>
+            </tr>
+        
+            <tr>
+                <td>http-alt?</td>
+                <td>8000/tcp</td>
+                <td>2</td>
+                <td>Utilizado por posible dispositivo IoT</td>
+            </tr>
+        
+            <tr>
+                <td>ssl/https-alt?</td>
+                <td>8443/tcp</td>
+                <td>2</td>
+                <td>Utilizado por posible dispositivo IoT</td>
+            </tr>
+        
+            <tr>
+                <td>blackice-icecap?</td>
+                <td>8081/tcp</td>
+                <td>1</td>
+                <td>Utilizado por posible dispositivo IoT</td>
+            </tr>
+        
+            <tr>
+                <td>ipcam</td>
+                <td>8000/tcp</td>
+                <td>1</td>
+                <td>Utilizado por posible dispositivo IoT</td>
+            </tr>
+        
+            <tr>
+                <td>sdr?</td>
+                <td>9010/tcp</td>
+                <td>1</td>
+                <td>Utilizado por posible dispositivo IoT</td>
+            </tr>
+        
+            <tr>
+                <td>ssl/https</td>
+                <td>443/tcp</td>
+                <td>3</td>
+                <td>Navegacion web segura (HTTPS), utiliza TLS.</td>
+            </tr>
+        
+            <tr>
+                <td>ssl/coldfusion-auth?</td>
+                <td>44443/tcp</td>
+                <td>1</td>
+                <td>Utilizado por posible dispositivo IoT</td>
+            </tr>
+        
+            <tr>
+                <td>microsoft-ds?</td>
+                <td>445/tcp</td>
+                <td>1</td>
+                <td>Usado por varios servicios, entre ellos Active Directory.</td>
+            </tr>
+        
+            <tr>
+                <td>msmq?</td>
+                <td>1801/tcp</td>
+                <td>1</td>
+                <td>Utilizado por posible dispositivo IoT</td>
+            </tr>
+        
+            <tr>
+                <td>msrpc</td>
+                <td>2103/tcp</td>
+                <td>1</td>
+                <td>Utilizado por posible dispositivo IoT</td>
+            </tr>
+        
+            <tr>
+                <td>msrpc</td>
+                <td>2105/tcp</td>
+                <td>1</td>
+                <td>Utilizado por posible dispositivo IoT</td>
+            </tr>
+        
+            <tr>
+                <td>msrpc</td>
+                <td>2107/tcp</td>
+                <td>1</td>
+                <td>Utilizado por posible dispositivo IoT</td>
+            </tr>
+        
+            <tr>
+                <td>ms-wbt-server</td>
+                <td>3389/tcp</td>
+                <td>1</td>
+                <td>Utilizado por el escritorio remoto de Windows (recomendable cambiarlo)</td>
+            </tr>
+        
+            <tr>
+                <td>http</td>
+                <td>5357/tcp</td>
+                <td>1</td>
+                <td>Utilizado por posible dispositivo IoT</td>
+            </tr>
+        
+            <tr>
+                <td>printer</td>
+                <td>515/tcp</td>
+                <td>1</td>
+                <td>Utilizado para el servicio de impresion en red en los sistemas operativos Windows.</td>
+            </tr>
+        
+            <tr>
+                <td>ssl/ipp</td>
+                <td>631/tcp</td>
+                <td>1</td>
+                <td>Utilizado por posible dispositivo IoT</td>
+            </tr>
+        
+            <tr>
+                <td>http-proxy</td>
+                <td>8080/tcp</td>
+                <td>1</td>
+                <td>Puerto alternativo al 80 TCP para servidores web. Generalmente se usa en entornos de prueba o para configuraciones de servicios web paralelos.</td>
+            </tr>
+        
+            <tr>
+                <td>jetdirect?</td>
+                <td>9100/tcp</td>
+                <td>1</td>
+                <td>Utilizado por posible dispositivo IoT</td>
+            </tr>
+        
+            <tr>
+                <td>smtp</td>
+                <td>25/tcp</td>
+                <td>1</td>
+                <td>Protocolo SMTP para envio de correos electronicos, aunque tambien puede usar los puertos 26 y 2525.</td>
+            </tr>
+        
+            <tr>
+                <td>imap</td>
+                <td>143/tcp</td>
+                <td>1</td>
+                <td>Usado por el protocolo IMAP en gestores de correo electronico.</td>
+            </tr>
+        
+            <tr>
+                <td>dnp?</td>
+                <td>20000/tcp</td>
+                <td>1</td>
+                <td>Utilizado por posible dispositivo IoT</td>
+            </tr>
+        
+        </table>
+        
+        <h2>Servicios por Host</h2>
+        <table>
+            <tr>
+                <th>Host</th>
+                <th>Cantidad de Servicios</th>
+                <th>Puertos</th>
+            </tr>
+    
+            <tr>
+                <td>192.168.100.1</td>
+                <td>1</td>
+                <td>53/tcp/domain</td>
+            </tr>
+        
+            <tr>
+                <td>192.168.100.2</td>
+                <td>4</td>
+                <td>22/tcp/ssh, 139/tcp/netbios-ssn, 445/tcp/netbios-ssn, 5901/tcp/vnc</td>
+            </tr>
+        
+            <tr>
+                <td>192.168.100.3</td>
+                <td>3</td>
+                <td>22/tcp/ssh, 80/tcp/http, 443/tcp/ssl/http</td>
+            </tr>
+        
+            <tr>
+                <td>192.168.100.4</td>
+                <td>5</td>
+                <td>80/tcp/http, 443/tcp/ssl/https?, 554/tcp/rtsp, 8000/tcp/http-alt?, 8443/tcp/ssl/https-alt?</td>
+            </tr>
+        
+            <tr>
+                <td>192.168.100.5</td>
+                <td>5</td>
+                <td>80/tcp/http, 443/tcp/ssl/https?, 554/tcp/rtsp, 8000/tcp/http-alt?, 8443/tcp/ssl/https-alt?</td>
+            </tr>
+        
+            <tr>
+                <td>192.168.100.51</td>
+                <td>1</td>
+                <td>8081/tcp/blackice-icecap?</td>
+            </tr>
+        
+            <tr>
+                <td>192.168.100.52</td>
+                <td>4</td>
+                <td>80/tcp/http, 554/tcp/rtsp, 8000/tcp/ipcam, 9010/tcp/sdr?</td>
+            </tr>
+        
+            <tr>
+                <td>192.168.100.115</td>
+                <td>3</td>
+                <td>80/tcp/http, 443/tcp/ssl/https, 44443/tcp/ssl/coldfusion-auth?</td>
+            </tr>
+        
+            <tr>
+                <td>192.168.100.143</td>
+                <td>9</td>
+                <td>80/tcp/http, 139/tcp/netbios-ssn, 445/tcp/microsoft-ds?, 1801/tcp/msmq?, 2103/tcp/msrpc, 2105/tcp/msrpc, 2107/tcp/msrpc, 3389/tcp/ms-wbt-server, 5357/tcp/http</td>
+            </tr>
+        
+            <tr>
+                <td>192.168.100.159</td>
+                <td>2</td>
+                <td>80/tcp/http, 443/tcp/ssl/https</td>
+            </tr>
+        
+            <tr>
+                <td>192.168.100.189</td>
+                <td>6</td>
+                <td>80/tcp/http, 443/tcp/ssl/https, 515/tcp/printer, 631/tcp/ssl/ipp, 8080/tcp/http-proxy, 9100/tcp/jetdirect?</td>
+            </tr>
+        
+            <tr>
+                <td>192.168.100.201</td>
+                <td>5</td>
+                <td>25/tcp/smtp, 80/tcp/http, 143/tcp/imap, 443/tcp/ssl/https?, 20000/tcp/dnp?</td>
+            </tr>
+        
+        </table>
+        
+        <h2>Recomendacion de Servicios</h2>
+        <table>
+            <tr>
+                <th>Puerto</th>
+                <th>Servicio</th>
+                <th>Descripcion</th>
+                <th>Recomendacion</th>
+            </tr>
+    
+            <tr>
+                <td>53/tcp</td>
+                <td>domain</td>
+                <td>Servicio DNS (Domain Name System).</td>
+                <td>Limita el acceso al servicio DNS y utiliza DNSSEC para mejorar la seguridad.</td>
+            </tr>
+        
+            <tr>
+                <td>22/tcp</td>
+                <td>ssh</td>
+                <td>Conexiones seguras SSH y SFTP, salvo que se cambie el puerto de escucha de SSH.</td>
+                <td>Asegurate de que solo este accesible desde redes confiables y deshabilita el acceso por contrasena en favor de autenticacion por clave. Cambia el puerto por defecto si es posible.</td>
+            </tr>
+        
+            <tr>
+                <td>139/tcp</td>
+                <td>netbios-ssn</td>
+                <td>Utilizados por el Protocolo NetBIOS o NBT, muy comun en redes de Windows.</td>
+                <td>Evita exponer estos puertos a Internet. Utilizalos solo en redes internas o de confianza.</td>
+            </tr>
+        
+            <tr>
+                <td>445/tcp</td>
+                <td>netbios-ssn</td>
+                <td>Usado por varios servicios, entre ellos Active Directory.</td>
+                <td>Limita su uso a redes internas y de confianza, ya que puede ser un punto de entrada para ataques como el ransomware.</td>
+            </tr>
+        
+            <tr>
+                <td>5901/tcp</td>
+                <td>vnc</td>
+                <td>Usados por el programa VNC (Virtual Network Computing), que permite el control remoto de equipos.</td>
+                <td>Limita el acceso a VNC mediante contrasenas fuertes y usa solo redes internas para evitar accesos no autorizados.</td>
+            </tr>
+        
+            <tr>
+                <td>80/tcp</td>
+                <td>http</td>
+                <td>Navegacion web no segura (HTTP).</td>
+                <td>Redirige el trafico HTTP al puerto 443 (HTTPS) para cifrar las conexiones.</td>
+            </tr>
+        
+            <tr>
+                <td>443/tcp</td>
+                <td>ssl/http</td>
+                <td>Navegacion web segura (HTTPS), utiliza TLS.</td>
+                <td>Asegurate de contar con certificados SSL/TLS actualizados y configuraciones de seguridad (HSTS, certificados validos, etc.).</td>
+            </tr>
+        
+            <tr>
+                <td>443/tcp</td>
+                <td>ssl/https?</td>
+                <td>Navegacion web segura (HTTPS), utiliza TLS.</td>
+                <td>Asegurate de contar con certificados SSL/TLS actualizados y configuraciones de seguridad (HSTS, certificados validos, etc.).</td>
+            </tr>
+        
+            <tr>
+                <td>554/tcp</td>
+                <td>rtsp</td>
+                <td>Utilizado por posible dispositivo IoT</td>
+                <td>Revisar fisicamente el dispositivo</td>
+            </tr>
+        
+            <tr>
+                <td>8000/tcp</td>
+                <td>http-alt?</td>
+                <td>Utilizado por posible dispositivo IoT</td>
+                <td>Revisar fisicamente el dispositivo</td>
+            </tr>
+        
+            <tr>
+                <td>8443/tcp</td>
+                <td>ssl/https-alt?</td>
+                <td>Utilizado por posible dispositivo IoT</td>
+                <td>Revisar fisicamente el dispositivo</td>
+            </tr>
+        
+            <tr>
+                <td>8081/tcp</td>
+                <td>blackice-icecap?</td>
+                <td>Utilizado por posible dispositivo IoT</td>
+                <td>Revisar fisicamente el dispositivo</td>
+            </tr>
+        
+            <tr>
+                <td>8000/tcp</td>
+                <td>ipcam</td>
+                <td>Utilizado por posible dispositivo IoT</td>
+                <td>Revisar fisicamente el dispositivo</td>
+            </tr>
+        
+            <tr>
+                <td>9010/tcp</td>
+                <td>sdr?</td>
+                <td>Utilizado por posible dispositivo IoT</td>
+                <td>Revisar fisicamente el dispositivo</td>
+            </tr>
+        
+            <tr>
+                <td>443/tcp</td>
+                <td>ssl/https</td>
+                <td>Navegacion web segura (HTTPS), utiliza TLS.</td>
+                <td>Asegurate de contar con certificados SSL/TLS actualizados y configuraciones de seguridad (HSTS, certificados validos, etc.).</td>
+            </tr>
+        
+            <tr>
+                <td>44443/tcp</td>
+                <td>ssl/coldfusion-auth?</td>
+                <td>Utilizado por posible dispositivo IoT</td>
+                <td>Revisar fisicamente el dispositivo</td>
+            </tr>
+        
+            <tr>
+                <td>445/tcp</td>
+                <td>microsoft-ds?</td>
+                <td>Usado por varios servicios, entre ellos Active Directory.</td>
+                <td>Limita su uso a redes internas y de confianza, ya que puede ser un punto de entrada para ataques como el ransomware.</td>
+            </tr>
+        
+            <tr>
+                <td>1801/tcp</td>
+                <td>msmq?</td>
+                <td>Utilizado por posible dispositivo IoT</td>
+                <td>Revisar fisicamente el dispositivo</td>
+            </tr>
+        
+            <tr>
+                <td>2103/tcp</td>
+                <td>msrpc</td>
+                <td>Utilizado por posible dispositivo IoT</td>
+                <td>Revisar fisicamente el dispositivo</td>
+            </tr>
+        
+            <tr>
+                <td>2105/tcp</td>
+                <td>msrpc</td>
+                <td>Utilizado por posible dispositivo IoT</td>
+                <td>Revisar fisicamente el dispositivo</td>
+            </tr>
+        
+            <tr>
+                <td>2107/tcp</td>
+                <td>msrpc</td>
+                <td>Utilizado por posible dispositivo IoT</td>
+                <td>Revisar fisicamente el dispositivo</td>
+            </tr>
+        
+            <tr>
+                <td>3389/tcp</td>
+                <td>ms-wbt-server</td>
+                <td>Utilizado por el escritorio remoto de Windows (recomendable cambiarlo)</td>
+                <td>Cambia el puerto por defecto si es posible y habilita autenticacion multifactor para conexiones de escritorio remoto.</td>
+            </tr>
+        
+            <tr>
+                <td>5357/tcp</td>
+                <td>http</td>
+                <td>Utilizado por posible dispositivo IoT</td>
+                <td>Revisar fisicamente el dispositivo</td>
+            </tr>
+        
+            <tr>
+                <td>515/tcp</td>
+                <td>printer</td>
+                <td>Utilizado para el servicio de impresion en red en los sistemas operativos Windows.</td>
+                <td>Asegurar con una contrasena el panel de control y conectarla en redes internas o de confianza.</td>
+            </tr>
+        
+            <tr>
+                <td>631/tcp</td>
+                <td>ssl/ipp</td>
+                <td>Utilizado por posible dispositivo IoT</td>
+                <td>Revisar fisicamente el dispositivo</td>
+            </tr>
+        
+            <tr>
+                <td>8080/tcp</td>
+                <td>http-proxy</td>
+                <td>Puerto alternativo al 80 TCP para servidores web. Generalmente se usa en entornos de prueba o para configuraciones de servicios web paralelos.</td>
+                <td>Usa HTTPS en lugar de HTTP si es posible y limita el acceso a entornos de prueba.</td>
+            </tr>
+        
+            <tr>
+                <td>9100/tcp</td>
+                <td>jetdirect?</td>
+                <td>Utilizado por posible dispositivo IoT</td>
+                <td>Revisar fisicamente el dispositivo</td>
+            </tr>
+        
+            <tr>
+                <td>25/tcp</td>
+                <td>smtp</td>
+                <td>Protocolo SMTP para envio de correos electronicos, aunque tambien puede usar los puertos 26 y 2525.</td>
+                <td>Asegurate de que el servidor de correo este configurado para evitar el envio de spam y considera el uso de SMTP autenticado.</td>
+            </tr>
+        
+            <tr>
+                <td>143/tcp</td>
+                <td>imap</td>
+                <td>Usado por el protocolo IMAP en gestores de correo electronico.</td>
+                <td>Considera el uso de IMAP SSL (puerto 993) para asegurar la conexion de correo.</td>
+            </tr>
+        
+            <tr>
+                <td>20000/tcp</td>
+                <td>dnp?</td>
+                <td>Utilizado por posible dispositivo IoT</td>
+                <td>Revisar fisicamente el dispositivo</td>
+            </tr>
+        
+        </table>
+        
+        <h2>Graficos de Servicios</h2>
+        <div class="chart-container">
+            <canvas id="servicesChart"></canvas>
+        </div>
+        
+        <h2>Grafico de Sistemas Operativos</h2>
+        <div class="chart-container">
+            <canvas id="osChart"></canvas>
+        </div>
+
+        <h2>Recomendaciones de Seguridad</h2>
+        <p>A continuacion se presentan algunas recomendaciones para mejorar la seguridad de la infraestructura de la red:</p>
+        <ol>
+            <li><strong>Monitoreo de Servicios:</strong> Implementar soluciones de deteccion de intrusos (IDS) para identificar actividades sospechosas.</li>
+            <li><strong>Actualizacion de Software:</strong> Mantener todos los servicios y aplicaciones actualizados con los ultimos parches de seguridad.</li>
+            <li><strong>Control de Acceso:</strong> Limitar el acceso a los servicios criticos solo a usuarios y dispositivos autorizados.</li>
+            <li><strong>Desactivacion de Servicios Innecesarios:</strong> Revisar la lista de servicios activos y desactivar aquellos que no sean necesarios.</li>
+            <li><strong>Configuracion de Firewalls:</strong> Restringir el trafico solo a los puertos y protocolos necesarios.</li>
+            <li><strong>Cifrado de Datos:</strong> Implementar cifrado para la transmision de datos sensibles utilizando protocolos seguros.</li>
+            <li><strong>Pruebas de Seguridad:</strong> Programar pruebas de penetracion y auditorias de seguridad regularmente.</li>
+            <li><strong>Documentacion y Procedimientos:</strong> Mantener una documentacion clara y actualizada sobre la configuracion de la red.</li>
+        </ol>
+
+        <script>
+            const ctx = document.getElementById('servicesChart').getContext('2d');
+            const labels = ["domain (53/tcp)", "ssh (22/tcp)", "netbios-ssn (139/tcp)", "netbios-ssn (445/tcp)", "vnc (5901/tcp)", "http (80/tcp)", "ssl/http (443/tcp)", "ssl/https? (443/tcp)", "rtsp (554/tcp)", "http-alt? (8000/tcp)", "ssl/https-alt? (8443/tcp)", "blackice-icecap? (8081/tcp)", "ipcam (8000/tcp)", "sdr? (9010/tcp)", "ssl/https (443/tcp)", "ssl/coldfusion-auth? (44443/tcp)", "microsoft-ds? (445/tcp)", "msmq? (1801/tcp)", "msrpc (2103/tcp)", "msrpc (2105/tcp)", "msrpc (2107/tcp)", "ms-wbt-server (3389/tcp)", "http (5357/tcp)", "printer (515/tcp)", "ssl/ipp (631/tcp)", "http-proxy (8080/tcp)", "jetdirect? (9100/tcp)", "smtp (25/tcp)", "imap (143/tcp)", "dnp? (20000/tcp)"];
+            const data = {
+                labels: labels,
+                datasets: [{
+                    label: 'Ocurrencias de Servicios',
+                    data: [1, 2, 2, 1, 1, 9, 1, 3, 3, 2, 2, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    backgroundColor: 'rgba(44, 62, 80, 0.5)',
+                    borderColor: 'rgba(44, 62, 80, 1)',
+                    borderWidth: 1
+                }]
+            };
+            const config = {
+                type: 'bar',
+                data: data,
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            };
+            const servicesChart = new Chart(ctx, config);
+
+            // Grafico de sistemas operativos
+            const osCtx = document.getElementById('osChart').getContext('2d');
+            const osLabels = ["Desconocido", "Linux; CPE: cpe:/o:linux:linux_kernel", "Mac OS X; CPE: cpe:/o:apple:mac_os_x", "Windows; CPE: cpe:/o:microsoft:windows"];
+            const osData = {
+                labels: osLabels,
+                datasets: [{
+                    label: 'Cantidad de Hosts por Sistema Operativo',
+                    data: [14, 1, 1, 1],
+                    backgroundColor: 'rgba(231, 76, 60, 0.5)',
+                    borderColor: 'rgba(231, 76, 60, 1)',
+                    borderWidth: 1
+                }]
+            };
+            const osConfig = {
+                type: 'bar',
+                data: osData,
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            };
+            const osChart = new Chart(osCtx, osConfig);
+        </script>
+
+        <footer>
+        </footer>
+    </body>
+    </html>
+    
