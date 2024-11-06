@@ -35,8 +35,6 @@ sudo nmap -sV -iL /home/cibersecurity-tool/web_application/data/aliveHosts.txt |
     status = $2
     protocol = $3
     service = $4
-    # Eliminar caracteres de escape
-    gsub(/[\x5C\x22\x0A\x0D\x2]/, "", service)  # \x5C: \, \x22: ", \x0A: \n, \x0D: \r
     json_host = json_host "{ \"Port\": \"" port "\", \"Status\": \"" status "\", \"Protocol\": \"" protocol "\", \"Service\": \"" service "\"}"
 }
 /MAC Address:/ {
@@ -65,4 +63,5 @@ END {
 echo "[" > $DATA_FILE
 cat  /home/cibersecurity-tool/web_application/data/temp.json >> $DATA_FILE
 echo "]" >> $DATA_FILE
+
 

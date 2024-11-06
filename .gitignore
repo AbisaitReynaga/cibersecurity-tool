@@ -2,7 +2,9 @@
 venv/
 virtual_enviroment
 .env
-
+web_application/data/*
+#/data/cve_data/
+#/data/cve_data/cve_raw/
 # Ignore application runtime files
 run_application
 
