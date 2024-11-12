@@ -1,639 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Webserver Auditorias Web{% endblock %}</title>
+    <style>
+        html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+        /* Ensure the body takes up full height */
+        html, body {
+            height: 100%;
+        }
+        /* Container for main content and sidebar */
+        .wrapper {
+            display: flex;
+            min-height: 100vh; /* Full viewport height */
+            flex-direction: column;
+        }
+        /* Main content should grow to fill available space */
+        .w3-main {
+            flex-grow: 1;
+            margin-left: 300px; /* Adjust to your sidebar width */
+            margin-top: 43px;
+        }
+        /* Sidebar fixed to the left */
+        .w3-sidebar {
+            position: fixed;
+            width: 300px;
+            height: 100%; /* Full height */
+            top: 0;
+            left: 0;
+        }
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 1em;
+            background-color: #f1f1f1;
+        }
+    </style>
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" >
 
-    <!DOCTYPE html>
-    <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <title>Reporte de Infraestructura</title>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <style>
-            body { font-family: 'Arial', sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; }
-            h1, h2 { color: #2c3e50; }
-            table { width: 100%; border-collapse: collapse; margin-bottom: 20px; background: white; }
-            th, td { border: 1px solid #bdc3c7; padding: 8px; text-align: left; }
-            th { background-color: #2c3e50; color: white; }
-            tr:nth-child(even) { background: #ecf0f1; }
-            tr:hover { background: #dfe6e9; }
-            .chart-container { width: 100%; height: 400px; margin-bottom: 30px; }
-            footer { margin-top: 20px; font-size: 12px; color: #7f8c8d; }
-        </style>
-    </head>
-    <body>
-	<a href="/reported">
-        <h1>Reporte de Infraestructura</h1>
-	</a>
-        <h2>Resumen General</h2>
-        <p>Este informe proporciona un analisis detallado de los servicios detectados en la infraestructura de la red. Incluye informacion sobre los puertos abiertos, servicios asociados y recomendaciones para mejorar la seguridad de la red.</p>
-        
-        <h2>Servicios Utilizados</h2>
-        <table>
-            <tr>
-                <th>Servicio</th>
-                <th>Puerto</th>
-                <th># Ocurrencia</th>
-                <th>Descripcion</th>
-            </tr>
-    
-            <tr>
-                <td>ssh</td>
-                <td>22/tcp</td>
-                <td>2</td>
-                <td>Conexiones seguras SSH y SFTP, salvo que se cambie el puerto de escucha de SSH.</td>
-            </tr>
-        
-            <tr>
-                <td>http</td>
-                <td>8008/tcp</td>
-                <td>39</td>
-                <td>Utilizado por posible dispositivo IoT</td>
-            </tr>
-        
-            <tr>
-                <td>http</td>
-                <td>80/tcp</td>
-                <td>5</td>
-                <td>Navegacion web no segura (HTTP).</td>
-            </tr>
-        
-            <tr>
-                <td>msrpc</td>
-                <td>135/tcp</td>
-                <td>17</td>
-                <td>Utilizado por posible dispositivo IoT</td>
-            </tr>
-        
-            <tr>
-                <td>ssl/http</td>
-                <td>443/tcp</td>
-                <td>5</td>
-                <td>Navegacion web segura (HTTPS), utiliza TLS.</td>
-            </tr>
-        
-            <tr>
-                <td>vmrdp?</td>
-                <td>2179/tcp</td>
-                <td>2</td>
-                <td>Utilizado por posible dispositivo IoT</td>
-            </tr>
-        
-            <tr>
-                <td>mysql</td>
-                <td>3306/tcp</td>
-                <td>4</td>
-                <td>Utilizado por bases de datos MySQL.</td>
-            </tr>
-        
-            <tr>
-                <td>http</td>
-                <td>3580/tcp</td>
-                <td>1</td>
-                <td>Utilizado por posible dispositivo IoT</td>
-            </tr>
-        
-            <tr>
-                <td>vnc-http</td>
-                <td>5800/tcp</td>
-                <td>23</td>
-                <td>Usados por el programa VNC (Virtual Network Computing), que permite el control remoto de equipos.</td>
-            </tr>
-        
-            <tr>
-                <td>vnc</td>
-                <td>5900/tcp</td>
-                <td>23</td>
-                <td>Usados por el programa VNC (Virtual Network Computing), que permite el control remoto de equipos.</td>
-            </tr>
-        
-            <tr>
-                <td>http</td>
-                <td>8080/tcp</td>
-                <td>1</td>
-                <td>Puerto alternativo al 80 TCP para servidores web. Generalmente se usa en entornos de prueba o para configuraciones de servicios web paralelos.</td>
-            </tr>
-        
-            <tr>
-                <td>netbios-ssn</td>
-                <td>139/tcp</td>
-                <td>16</td>
-                <td>Utilizados por el Protocolo NetBIOS o NBT, muy comun en redes de Windows.</td>
-            </tr>
-        
-            <tr>
-                <td>microsoft-ds?</td>
-                <td>445/tcp</td>
-                <td>16</td>
-                <td>Usado por varios servicios, entre ellos Active Directory.</td>
-            </tr>
-        
-            <tr>
-                <td>mysql?</td>
-                <td>3306/tcp</td>
-                <td>1</td>
-                <td>Utilizado por bases de datos MySQL.</td>
-            </tr>
-        
-            <tr>
-                <td>ftp</td>
-                <td>21/tcp</td>
-                <td>1</td>
-                <td>Conexiones a servidores FTP en su canal de control, salvo que se cambie el puerto de escucha de FTP o FTPES.</td>
-            </tr>
-        
-            <tr>
-                <td>http</td>
-                <td>5357/tcp</td>
-                <td>10</td>
-                <td>Utilizado por posible dispositivo IoT</td>
-            </tr>
-        
-            <tr>
-                <td>ssl/realserver?</td>
-                <td>7070/tcp</td>
-                <td>1</td>
-                <td>Utilizado por posible dispositivo IoT</td>
-            </tr>
-        
-            <tr>
-                <td>rtsp</td>
-                <td>5000/tcp</td>
-                <td>2</td>
-                <td>Puerto de control del protocolo UPnP. Por seguridad, se recomienda desactivarlo en el router, ya que puede ser un punto vulnerable en la red.</td>
-            </tr>
-        
-            <tr>
-                <td>rtsp</td>
-                <td>7000/tcp</td>
-                <td>2</td>
-                <td>Utilizado por posible dispositivo IoT</td>
-            </tr>
-        
-        </table>
-        
-        <h2>Servicios por Host</h2>
-        <table>
-            <tr>
-                <th>Host</th>
-                <th>Cantidad de Servicios</th>
-                <th>Puertos</th>
-            </tr>
-    
-            <tr>
-                <td>192.168.84.1</td>
-                <td>2</td>
-                <td>22/tcp/ssh, 8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.33</td>
-                <td>10</td>
-                <td>80/tcp/http, 135/tcp/msrpc, 443/tcp/ssl/http, 2179/tcp/vmrdp?, 3306/tcp/mysql, 3580/tcp/http, 5800/tcp/vnc-http, 5900/tcp/vnc, 8008/tcp/http, 8080/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.35</td>
-                <td>7</td>
-                <td>135/tcp/msrpc, 139/tcp/netbios-ssn, 445/tcp/microsoft-ds?, 2179/tcp/vmrdp?, 5800/tcp/vnc-http, 5900/tcp/vnc, 8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.64</td>
-                <td>4</td>
-                <td>135/tcp/msrpc, 139/tcp/netbios-ssn, 445/tcp/microsoft-ds?, 8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.75</td>
-                <td>9</td>
-                <td>80/tcp/http, 135/tcp/msrpc, 139/tcp/netbios-ssn, 443/tcp/ssl/http, 445/tcp/microsoft-ds?, 3306/tcp/mysql?, 5800/tcp/vnc-http, 5900/tcp/vnc, 8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.77</td>
-                <td>7</td>
-                <td>21/tcp/ftp, 135/tcp/msrpc, 139/tcp/netbios-ssn, 445/tcp/microsoft-ds?, 5800/tcp/vnc-http, 5900/tcp/vnc, 8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.100</td>
-                <td>3</td>
-                <td>5800/tcp/vnc-http, 5900/tcp/vnc, 8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.102</td>
-                <td>1</td>
-                <td>8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.105</td>
-                <td>3</td>
-                <td>5800/tcp/vnc-http, 5900/tcp/vnc, 8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.106</td>
-                <td>1</td>
-                <td>8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.108</td>
-                <td>1</td>
-                <td>8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.109</td>
-                <td>1</td>
-                <td>8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.110</td>
-                <td>1</td>
-                <td>8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.111</td>
-                <td>1</td>
-                <td>8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.113</td>
-                <td>1</td>
-                <td>8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.117</td>
-                <td>1</td>
-                <td>8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.129</td>
-                <td>3</td>
-                <td>5800/tcp/vnc-http, 5900/tcp/vnc, 8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.134</td>
-                <td>3</td>
-                <td>5800/tcp/vnc-http, 5900/tcp/vnc, 8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.144</td>
-                <td>3</td>
-                <td>5800/tcp/vnc-http, 5900/tcp/vnc, 8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.149</td>
-                <td>1</td>
-                <td>8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.150</td>
-                <td>3</td>
-                <td>5800/tcp/vnc-http, 5900/tcp/vnc, 8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.168</td>
-                <td>7</td>
-                <td>135/tcp/msrpc, 139/tcp/netbios-ssn, 445/tcp/microsoft-ds?, 5357/tcp/http, 5800/tcp/vnc-http, 5900/tcp/vnc, 8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.171</td>
-                <td>3</td>
-                <td>22/tcp/ssh, 7070/tcp/ssl/realserver?, 8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.172</td>
-                <td>3</td>
-                <td>5000/tcp/rtsp, 7000/tcp/rtsp, 8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.174</td>
-                <td>7</td>
-                <td>135/tcp/msrpc, 139/tcp/netbios-ssn, 445/tcp/microsoft-ds?, 5357/tcp/http, 5800/tcp/vnc-http, 5900/tcp/vnc, 8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.177</td>
-                <td>7</td>
-                <td>135/tcp/msrpc, 139/tcp/netbios-ssn, 445/tcp/microsoft-ds?, 5357/tcp/http, 5800/tcp/vnc-http, 5900/tcp/vnc, 8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.178</td>
-                <td>7</td>
-                <td>135/tcp/msrpc, 139/tcp/netbios-ssn, 445/tcp/microsoft-ds?, 5357/tcp/http, 5800/tcp/vnc-http, 5900/tcp/vnc, 8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.180</td>
-                <td>7</td>
-                <td>135/tcp/msrpc, 139/tcp/netbios-ssn, 445/tcp/microsoft-ds?, 5357/tcp/http, 5800/tcp/vnc-http, 5900/tcp/vnc, 8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.195</td>
-                <td>3</td>
-                <td>5800/tcp/vnc-http, 5900/tcp/vnc, 8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.199</td>
-                <td>1</td>
-                <td>8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.220</td>
-                <td>3</td>
-                <td>5000/tcp/rtsp, 7000/tcp/rtsp, 8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.228</td>
-                <td>7</td>
-                <td>135/tcp/msrpc, 139/tcp/netbios-ssn, 445/tcp/microsoft-ds?, 5357/tcp/http, 5800/tcp/vnc-http, 5900/tcp/vnc, 8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.230</td>
-                <td>10</td>
-                <td>80/tcp/http, 135/tcp/msrpc, 139/tcp/netbios-ssn, 443/tcp/ssl/http, 445/tcp/microsoft-ds?, 3306/tcp/mysql, 5357/tcp/http, 5800/tcp/vnc-http, 5900/tcp/vnc, 8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.235</td>
-                <td>7</td>
-                <td>135/tcp/msrpc, 139/tcp/netbios-ssn, 445/tcp/microsoft-ds?, 5357/tcp/http, 5800/tcp/vnc-http, 5900/tcp/vnc, 8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.236</td>
-                <td>9</td>
-                <td>80/tcp/http, 135/tcp/msrpc, 139/tcp/netbios-ssn, 443/tcp/ssl/http, 445/tcp/microsoft-ds?, 3306/tcp/mysql, 5800/tcp/vnc-http, 5900/tcp/vnc, 8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.239</td>
-                <td>1</td>
-                <td>8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.241</td>
-                <td>10</td>
-                <td>80/tcp/http, 135/tcp/msrpc, 139/tcp/netbios-ssn, 443/tcp/ssl/http, 445/tcp/microsoft-ds?, 3306/tcp/mysql, 5357/tcp/http, 5800/tcp/vnc-http, 5900/tcp/vnc, 8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.242</td>
-                <td>6</td>
-                <td>135/tcp/msrpc, 139/tcp/netbios-ssn, 445/tcp/microsoft-ds?, 5800/tcp/vnc-http, 5900/tcp/vnc, 8008/tcp/http</td>
-            </tr>
-        
-            <tr>
-                <td>192.168.84.244</td>
-                <td>7</td>
-                <td>135/tcp/msrpc, 139/tcp/netbios-ssn, 445/tcp/microsoft-ds?, 5357/tcp/http, 5800/tcp/vnc-http, 5900/tcp/vnc, 8008/tcp/http</td>
-            </tr>
-        
-        </table>
-        
-        <h2>Recomendacion de Servicios</h2>
-        <table>
-            <tr>
-                <th>Puerto</th>
-                <th>Servicio</th>
-                <th>Descripcion</th>
-                <th>Recomendacion</th>
-            </tr>
-    
-            <tr>
-                <td>22/tcp</td>
-                <td>ssh</td>
-                <td>Conexiones seguras SSH y SFTP, salvo que se cambie el puerto de escucha de SSH.</td>
-                <td>Asegurate de que solo este accesible desde redes confiables y deshabilita el acceso por contrasena en favor de autenticacion por clave. Cambia el puerto por defecto si es posible.</td>
-            </tr>
-        
-            <tr>
-                <td>8008/tcp</td>
-                <td>http</td>
-                <td>Utilizado por posible dispositivo IoT</td>
-                <td>Revisar fisicamente el dispositivo</td>
-            </tr>
-        
-            <tr>
-                <td>80/tcp</td>
-                <td>http</td>
-                <td>Navegacion web no segura (HTTP).</td>
-                <td>Redirige el trafico HTTP al puerto 443 (HTTPS) para cifrar las conexiones.</td>
-            </tr>
-        
-            <tr>
-                <td>135/tcp</td>
-                <td>msrpc</td>
-                <td>Utilizado por posible dispositivo IoT</td>
-                <td>Revisar fisicamente el dispositivo</td>
-            </tr>
-        
-            <tr>
-                <td>443/tcp</td>
-                <td>ssl/http</td>
-                <td>Navegacion web segura (HTTPS), utiliza TLS.</td>
-                <td>Asegurate de contar con certificados SSL/TLS actualizados y configuraciones de seguridad (HSTS, certificados validos, etc.).</td>
-            </tr>
-        
-            <tr>
-                <td>2179/tcp</td>
-                <td>vmrdp?</td>
-                <td>Utilizado por posible dispositivo IoT</td>
-                <td>Revisar fisicamente el dispositivo</td>
-            </tr>
-        
-            <tr>
-                <td>3306/tcp</td>
-                <td>mysql</td>
-                <td>Utilizado por bases de datos MySQL.</td>
-                <td>Limita el acceso a MySQL solo a redes de confianza y cambia las credenciales de usuario por defecto.</td>
-            </tr>
-        
-            <tr>
-                <td>3580/tcp</td>
-                <td>http</td>
-                <td>Utilizado por posible dispositivo IoT</td>
-                <td>Revisar fisicamente el dispositivo</td>
-            </tr>
-        
-            <tr>
-                <td>5800/tcp</td>
-                <td>vnc-http</td>
-                <td>Usados por el programa VNC (Virtual Network Computing), que permite el control remoto de equipos.</td>
-                <td>Limita el acceso a VNC mediante contrasenas fuertes y usa solo redes internas para evitar accesos no autorizados.</td>
-            </tr>
-        
-            <tr>
-                <td>5900/tcp</td>
-                <td>vnc</td>
-                <td>Usados por el programa VNC (Virtual Network Computing), que permite el control remoto de equipos.</td>
-                <td>Limita el acceso a VNC mediante contrasenas fuertes y usa solo redes internas para evitar accesos no autorizados.</td>
-            </tr>
-        
-            <tr>
-                <td>8080/tcp</td>
-                <td>http</td>
-                <td>Puerto alternativo al 80 TCP para servidores web. Generalmente se usa en entornos de prueba o para configuraciones de servicios web paralelos.</td>
-                <td>Usa HTTPS en lugar de HTTP si es posible y limita el acceso a entornos de prueba.</td>
-            </tr>
-        
-            <tr>
-                <td>139/tcp</td>
-                <td>netbios-ssn</td>
-                <td>Utilizados por el Protocolo NetBIOS o NBT, muy comun en redes de Windows.</td>
-                <td>Evita exponer estos puertos a Internet. Utilizalos solo en redes internas o de confianza.</td>
-            </tr>
-        
-            <tr>
-                <td>445/tcp</td>
-                <td>microsoft-ds?</td>
-                <td>Usado por varios servicios, entre ellos Active Directory.</td>
-                <td>Limita su uso a redes internas y de confianza, ya que puede ser un punto de entrada para ataques como el ransomware.</td>
-            </tr>
-        
-            <tr>
-                <td>3306/tcp</td>
-                <td>mysql?</td>
-                <td>Utilizado por bases de datos MySQL.</td>
-                <td>Limita el acceso a MySQL solo a redes de confianza y cambia las credenciales de usuario por defecto.</td>
-            </tr>
-        
-            <tr>
-                <td>21/tcp</td>
-                <td>ftp</td>
-                <td>Conexiones a servidores FTP en su canal de control, salvo que se cambie el puerto de escucha de FTP o FTPES.</td>
-                <td>Considera deshabilitarlo o limitar el acceso a usuarios especificos debido a su falta de cifrado en conexiones FTP. Utiliza FTPS para mayor seguridad.</td>
-            </tr>
-        
-            <tr>
-                <td>5357/tcp</td>
-                <td>http</td>
-                <td>Utilizado por posible dispositivo IoT</td>
-                <td>Revisar fisicamente el dispositivo</td>
-            </tr>
-        
-            <tr>
-                <td>7070/tcp</td>
-                <td>ssl/realserver?</td>
-                <td>Utilizado por posible dispositivo IoT</td>
-                <td>Revisar fisicamente el dispositivo</td>
-            </tr>
-        
-            <tr>
-                <td>5000/tcp</td>
-                <td>rtsp</td>
-                <td>Puerto de control del protocolo UPnP. Por seguridad, se recomienda desactivarlo en el router, ya que puede ser un punto vulnerable en la red.</td>
-                <td>Desactiva UPnP en el router y solo habilitalo si es absolutamente necesario.</td>
-            </tr>
-        
-            <tr>
-                <td>7000/tcp</td>
-                <td>rtsp</td>
-                <td>Utilizado por posible dispositivo IoT</td>
-                <td>Revisar fisicamente el dispositivo</td>
-            </tr>
-        
-        </table>
-        
-        <h2>Graficos de Servicios</h2>
-        <div class="chart-container">
-            <canvas id="servicesChart"></canvas>
-        </div>
-        
-        <h2>Grafico de Sistemas Operativos</h2>
-        <div class="chart-container">
-            <canvas id="osChart"></canvas>
-        </div>
+    <!-- Link to the main stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 
-        <h2>Recomendaciones de Seguridad</h2>
-        <p>A continuacion se presentan algunas recomendaciones para mejorar la seguridad de la infraestructura de la red:</p>
-        <ol>
-            <li><strong>Monitoreo de Servicios:</strong> Implementar soluciones de deteccion de intrusos (IDS) para identificar actividades sospechosas.</li>
-            <li><strong>Actualizacion de Software:</strong> Mantener todos los servicios y aplicaciones actualizados con los ultimos parches de seguridad.</li>
-            <li><strong>Control de Acceso:</strong> Limitar el acceso a los servicios criticos solo a usuarios y dispositivos autorizados.</li>
-            <li><strong>Desactivacion de Servicios Innecesarios:</strong> Revisar la lista de servicios activos y desactivar aquellos que no sean necesarios.</li>
-            <li><strong>Configuracion de Firewalls:</strong> Restringir el trafico solo a los puertos y protocolos necesarios.</li>
-            <li><strong>Cifrado de Datos:</strong> Implementar cifrado para la transmision de datos sensibles utilizando protocolos seguros.</li>
-            <li><strong>Pruebas de Seguridad:</strong> Programar pruebas de penetracion y auditorias de seguridad regularmente.</li>
-            <li><strong>Documentacion y Procedimientos:</strong> Mantener una documentacion clara y actualizada sobre la configuracion de la red.</li>
-        </ol>
+    <!-- Block for extra CSS files -->
+    {% block extra_css %}{% endblock %}
 
-        <script>
-            const ctx = document.getElementById('servicesChart').getContext('2d');
-            const labels = ["ssh (22/tcp)", "http (8008/tcp)", "http (80/tcp)", "msrpc (135/tcp)", "ssl/http (443/tcp)", "vmrdp? (2179/tcp)", "mysql (3306/tcp)", "http (3580/tcp)", "vnc-http (5800/tcp)", "vnc (5900/tcp)", "http (8080/tcp)", "netbios-ssn (139/tcp)", "microsoft-ds? (445/tcp)", "mysql? (3306/tcp)", "ftp (21/tcp)", "http (5357/tcp)", "ssl/realserver? (7070/tcp)", "rtsp (5000/tcp)", "rtsp (7000/tcp)"];
-            const data = {
-                labels: labels,
-                datasets: [{
-                    label: 'Ocurrencias de Servicios',
-                    data: [2, 39, 5, 17, 5, 2, 4, 1, 23, 23, 1, 16, 16, 1, 1, 10, 1, 2, 2],
-                    backgroundColor: 'rgba(44, 62, 80, 0.5)',
-                    borderColor: 'rgba(44, 62, 80, 1)',
-                    borderWidth: 1
-                }]
-            };
-            const config = {
-                type: 'bar',
-                data: data,
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
+    <!-- Use Flask-Bootstrap's pre-included CSS -->
+    {{ bootstrap.load_css() }}
+</head>
+
+<body class="w3-light-grey">
+    <div class="wrapper">
+        {% include 'layout/header.html' %}
+        {% include 'layout/sidebar.html' %}
+
+        <!-- Main content area -->
+	<div id="contenido-a-descargar">
+        <div class="w3-main">
+            <main class="container my-5">
+                {% block content %}
+
+                    <div class="organization">
+                        <h5 class="organization-name">Ciberseguridad Global SA.CV</h5>
+                    </div>
+            
+                    <div class="report">
+                        <h1 class="report-title">Infraestructure Report</h1>
+                    </div>
+            
+                    <div class="general-information">
+                        <div class="container-fluid text-left">
+                            <div class="row">
+                            <div class="col">
+                                <label for="auditorName" class="form-label">Auditor name </label>
+                                <input type="text" class="form-control" id="auditorNameInput">
+                            </div>
+                            <div class="col">
+                                <label for="date" class="form-label">Date </label>
+                                <input type="date" class="form-control" id="dateInput">
+                            </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="organizationName" class="form-label">Organization </label>
+                                    <input type="text" class="form-control" id="organizationNameInput">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            
+            
+            
+                    <div class="report-details">
+                        <h3 class="report-details-title">TCP/IP Ports Details</h3>
+                        <p  class="report-details-resume">This report presents a detailed network analysis, documenting active hosts, their open ports and services, as well as the protocols used and the operating systems identified on each device. Additionally, the analysis provides a comprehensive view of the network infrastructure, highlighting potential vulnerabilities or improper configurations that could compromise network security.</p>
+            
+                    </div>
+            
+            
+                    <div class="open-ports">
+                        <div class="open-ports-title">
+                            <h3>Open Ports</h3>
+                        </div>
+                        <div class="open-ports-table ">
+                            <table class="table table-striped table-bordered border-black text-center">
+                                <thead>
+                                <tr class="text-center">
+                                    <th scope="col">Risk</th>
+                                    <th scope="col">Port</th>
+                                    <th scope="col">State</th>
+                                    <th scope="col">Service</th>
+                                    <th scope="col">Service Name</th>
+				    <th scope="col">Version</th>
+                                    <th scope="col">Extra info</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+				{% for host in data %}
+				    {%for port in host['ports']%}
+                                <tr class="text-center">
+				    {% if port['portid'] == '22' %}
+                                        <td><img src="static/images/green.png" width="30px" height="30px"/></td>
+				    {% elif port['ssl'] == false %}
+					<td><img src="static/images/red.png" width="30px" height="30px"/></td>
+                             
+				    {% else %}
+	                                <td><img src="static/images/green.png" width="30px" height="30px"/></td>
+				    {% endif %}
+                                    <td>{{port['portid']}}</td>
+                                    <td>{{port['state']}}</td>
+                                    <td>{{port['service']}}</td>
+				    <td>{{port['name']}}</td>
+				    <td>{{port['version']}}</td>
+				    <td>{{port['extrainfo']}}</td>
+
+				</tr>
+				    {% endfor %}
+                                {% endfor %} 
+				  </tbody>
+			</table>
+			</div>
+			</div>
+                    
+	
+            
+                    <div class="services-used">
+                        <div class="services-used-title">
+                            <h3 class="services-used-title-h3">Services Used</h3>
+                            <p>This section is useful for identifying active services, understanding their network exposure, and assessing potential areas where additional security measures may be necessary.</p>
+                        </div>
+                        <div class="services-used-table">
+                            <table class="table table-striped table-bordered border-black">
+                                <thead>
+                                <tr class="text-center">
+				    <th scope="col">Service name</th>
+                                    <th scope="col">Port</th>
+				    <th scope="col">Protocol</th>
+                                    <th scope="col">Qty</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+				{% for port in ports %}
+                                <tr>
+				    <td>{{port['Names']}}</td>
+                                    <td>{{port['PortID']}}</td>
+                                    <td>{{port['Protocol']}}</td>
+                                    <td>{{port['Count']}}</td>
+                                </tr>
+				{% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="services-used-chart">
+                            <h5>Services Chart</h5>
+                            <div class="chart-container">
+                                <canvas id="servicesChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="device-information">
+                        <div class="device-information-title">
+                            <h3>Device Information</h3>
+                        </div>
+                        <div class="device-information-table">
+                            <table class="table table-striped table-bordered border-black">
+                                <thead>
+                                <tr class="text-center">
+                                    <th scope="col">Risk</th>
+                                    <th scope="col">IP Addres </th>
+                                    <th scope="col">MAC Address</th>
+                                    <th scope="col">Open port</th>
+                                    <th scope="col">Ports</th>
+				    <th scope="col">Services</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+				{% for device in devices%}
+                                <tr>
+                                    
+                                    {% if device['risk'] == 'Bajo' %}
+                                        <td><img src="static/images/green.png" width="30px" height="30px"/></td>
+                                    {% elif device['risk'] == 'Medio' %}
+                                        <td><img src="static/images/yellow.png" width="30px" height="30px"/></td>
+
+                                    {% else %}
+                                        <td><img src="static/images/red.png" width="30px" height="30px"/></td>
+                                    {% endif %}
+                                    <td>{{device['ip']}}</td>
+                                    <td>{{device['mac']}}</td>
+                                    <td>{{device['qty_port']}}</td>
+				    <td>{{device['ports']}}</td>
+                                    <td>{{device['names']}}</td>
+                                </tr>
+				{% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+            
+                {% endblock %}
+            </main>
+		<div>
+		<div class="container text-center">
+  			<div class="row">
+    				<div class="col">
+      					<button type="button" class="btn btn-primary btn-lg">Save Report</button>
+    				</div>
+    				<div class="col">
+      					<button type="button" class="btn btn-success btn-lg">Send Report</button>
+    				</div>
+  			</div>
+		</div>
+		<div>
+
+        <!-- Footer should always be visible at the bottom -->
+        {% include 'layout/footer.html' %}
+    </div>
+    </div>
+    <!-- Use Flask-Bootstrap's pre-included JS -->
+    {{ bootstrap.load_js() }}
+<script>
+    // Crear las etiquetas y los datos dinámicamente a partir de los puertos
+    const labels = [];
+    const data = [];
+
+    {% for port in ports %}
+        labels.push("({{ port['PortID'] }}/{{ port['Protocol'] }})");
+        data.push({{ port['Count'] }});
+    {% endfor %}
+
+    const ctx = document.getElementById('servicesChart').getContext('2d');
+    const chartData = {
+        labels: labels,
+        datasets: [{
+            label: 'Qty Services',
+            data: data,
+            backgroundColor: '#7290ee',
+            borderColor: '#000000',
+            borderWidth: 1
+        }]
+    };
+
+    const chartConfig = {
+        type: 'bar',
+        data: chartData,
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
-            };
-            const servicesChart = new Chart(ctx, config);
+            }
+        }
+    };
 
-            // Grafico de sistemas operativos
-            const osCtx = document.getElementById('osChart').getContext('2d');
-            const osLabels = ["Desconocido", "Windows; CPE: cpe:/o:microsoft:windows", "Linux; CPE: cpe:/o:linux:linux_kernel"];
-            const osData = {
-                labels: osLabels,
-                datasets: [{
-                    label: 'Cantidad de Hosts por Sistema Operativo',
-                    data: [21, 17, 1],
-                    backgroundColor: 'rgba(231, 76, 60, 0.5)',
-                    borderColor: 'rgba(231, 76, 60, 1)',
-                    borderWidth: 1
-                }]
-            };
-            const osConfig = {
-                type: 'bar',
-                data: osData,
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            };
-            const osChart = new Chart(osCtx, osConfig);
-        </script>
-
-        <footer>
-        </footer>
-    </body>
-    </html>
-    
+    const servicesChart = new Chart(ctx, chartConfig);
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

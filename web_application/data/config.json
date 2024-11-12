@@ -1,7 +1,7 @@
 {
-    "organization_name": "Galletera",
-    "network": "192.168.100.0",
+    "organization_name": "",
+    "network": "192.168.84.0",
     "netmask": 24,
-    "gateway": "192.168.100.1",
+    "gateway": "192.168.84.1",
     "domain": ""
 }

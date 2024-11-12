@@ -9,6 +9,8 @@ from flask_mail import Message
 from weasyprint import HTML
 from web_application.api.default_data import get_default_data_overview_label, get_default_data_pie_chart_overview, get_default_report_data, get_findings_list_services
 from web_application.utils.data.analyze_data import analyze_data
+from web_application.utils.data.port_analyzer import PortAnalyzer
+from web_application.utils.data.device_analyzer import DeviceAnalyzer
 import sh, json, os, subprocess,csv
 from collections import Counter, defaultdict
 
@@ -84,11 +86,25 @@ def risk_information():
 
 @app.route('/reports', methods=['GET', 'POST'])
 def reports():
-    # Load default report data from the default_data.py
-    placeholder_data = get_default_report_data()
 
-    return render_template('reports/reports.html', data=placeholder_data)
+    with open('/home/cibersecurity-tool/web_application/data/scanning_data/json_data/scanning.json', 'r') as f:
+        data = json.load(f)
+    analyzer = PortAnalyzer(data)
+    analyzer.process_ports()
 
+    device = DeviceAnalyzer(data)
+    device.process_ports()
+    device.calculate_risk()
+
+    # Obtener y mostrar el resumen de puertos
+    summary_d = device.get_summary()
+
+    # Obtener y mostrar el resumen de puertos
+    summary = analyzer.get_summary()
+    #print(summary)
+
+
+    return render_template('reports/report.html', data=data,ports=summary, devices=summary_d)
 @app.route('/save_report', methods=['POST'])
 def save_report():
     title       = request.form.get('title')
@@ -202,243 +218,3 @@ def netmask_to_cidr(netmask):
     cidr = sum([bin(int(octet)).count('1') for octet in octets])
 
     return cidr
-
-@app.route('/view_report', methods=['POST'])
-def view_report():
-    # Leer archivo JSON
-    with open('/home/cibersecurity-tool/web_application/data/scanning_data.json', 'r') as json_file:
-        data_json = json.load(json_file)
-
-    # Leer archivo CSV
-    puertos_info = {}
-    with open('/home/cibersecurity-tool/web_application/data/ports.csv', 'r') as csv_file:
-        reader = csv.DictReader(csv_file)
-        for row in reader:
-            puerto_protocolo = row['Puerto'].strip()  # Asegurarse de que no haya espacios
-            puertos_info[puerto_protocolo] = {
-                'Descripcion': row['Descripcion'],
-                'Recomendacion': row['Recomendacion']
-            }
-
-    # Procesar datos de servicios por host
-    hosts_info = defaultdict(list)
-    os_counter = Counter()
-    for record in data_json:
-        host = record['Host']
-        os_name = record.get('OS', 'Desconocido')  # Obtener el sistema operativo, o 'Desconocido' si no existe
-        os_counter[os_name] += 1  # Contar la ocurrencia del sistema operativo
-        for service in record['Services']:
-            puerto_protocolo = service['Port']
-            protocolo = service['Protocol']
-            hosts_info[host].append((puerto_protocolo, protocolo))
-
-    # Contar ocurrencias de cada servicio
-    servicios_contador = Counter((puerto_protocolo, protocolo) for host, servicios in hosts_info.items() for puerto_protocolo, protocolo in servicios)
-
-    # Generar el informe en HTML
-    html_content = """
-    <!DOCTYPE html>
-    <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <title>Reporte de Infraestructura</title>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <style>
-            body { font-family: 'Arial', sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; }
-            h1, h2 { color: #2c3e50; }
-            table { width: 100%; border-collapse: collapse; margin-bottom: 20px; background: white; }
-            th, td { border: 1px solid #bdc3c7; padding: 8px; text-align: left; }
-            th { background-color: #2c3e50; color: white; }
-            tr:nth-child(even) { background: #ecf0f1; }
-            tr:hover { background: #dfe6e9; }
-            .chart-container { width: 100%; height: 400px; margin-bottom: 30px; }
-            footer { margin-top: 20px; font-size: 12px; color: #7f8c8d; }
-        </style>
-    </head>
-    <body>
-	<a href="/reported">
-        <h1>Reporte de Infraestructura</h1>
-	</a>
-        <h2>Resumen General</h2>
-        <p>Este informe proporciona un analisis detallado de los servicios detectados en la infraestructura de la red. Incluye informacion sobre los puertos abiertos, servicios asociados y recomendaciones para mejorar la seguridad de la red.</p>
-        
-        <h2>Servicios Utilizados</h2>
-        <table>
-            <tr>
-                <th>Servicio</th>
-                <th>Puerto</th>
-                <th># Ocurrencia</th>
-                <th>Descripcion</th>
-            </tr>
-    """
-
-    # Agregar datos a la seccion de Servicios utilizados
-    for (puerto_protocolo, servicio), cantidad in servicios_contador.items():
-        descripcion = puertos_info.get(puerto_protocolo, {}).get('Descripcion', 'Utilizado por posible dispositivo IoT')
-        html_content += f"""
-            <tr>
-                <td>{servicio}</td>
-                <td>{puerto_protocolo}</td>
-                <td>{cantidad}</td>
-                <td>{descripcion}</td>
-            </tr>
-        """
-
-    html_content += """
-        </table>
-        
-        <h2>Servicios por Host</h2>
-        <table>
-            <tr>
-                <th>Host</th>
-                <th>Cantidad de Servicios</th>
-                <th>Puertos</th>
-            </tr>
-    """
-
-    # Agregar datos a la seccion de Servicios por Host
-    for host, servicios in hosts_info.items():
-        cantidad_servicios = len(servicios)
-        puertos = ", ".join(f"{p}/{s}" for p, s in servicios)
-        html_content += f"""
-            <tr>
-                <td>{host}</td>
-                <td>{cantidad_servicios}</td>
-                <td>{puertos}</td>
-            </tr>
-        """
-
-    html_content += """
-        </table>
-        
-        <h2>Recomendacion de Servicios</h2>
-        <table>
-            <tr>
-                <th>Puerto</th>
-                <th>Servicio</th>
-                <th>Descripcion</th>
-                <th>Recomendacion</th>
-            </tr>
-    """
-
-    # Agregar datos a la seccion de Recomendacion de Servicios
-    for (puerto_protocolo, servicio), _ in servicios_contador.items():
-        descripcion = puertos_info.get(puerto_protocolo, {}).get('Descripcion', 'Utilizado por posible dispositivo IoT')
-        recomendacion = puertos_info.get(puerto_protocolo, {}).get('Recomendacion', 'Revisar fisicamente el dispositivo')
-        html_content += f"""
-            <tr>
-                <td>{puerto_protocolo}</td>
-                <td>{servicio}</td>
-                <td>{descripcion}</td>
-                <td>{recomendacion}</td>
-            </tr>
-        """
-
-    html_content += """
-        </table>
-        
-        <h2>Graficos de Servicios</h2>
-        <div class="chart-container">
-            <canvas id="servicesChart"></canvas>
-        </div>
-        
-        <h2>Grafico de Sistemas Operativos</h2>
-        <div class="chart-container">
-            <canvas id="osChart"></canvas>
-        </div>
-
-        <h2>Recomendaciones de Seguridad</h2>
-        <p>A continuacion se presentan algunas recomendaciones para mejorar la seguridad de la infraestructura de la red:</p>
-        <ol>
-            <li><strong>Monitoreo de Servicios:</strong> Implementar soluciones de deteccion de intrusos (IDS) para identificar actividades sospechosas.</li>
-            <li><strong>Actualizacion de Software:</strong> Mantener todos los servicios y aplicaciones actualizados con los ultimos parches de seguridad.</li>
-            <li><strong>Control de Acceso:</strong> Limitar el acceso a los servicios criticos solo a usuarios y dispositivos autorizados.</li>
-            <li><strong>Desactivacion de Servicios Innecesarios:</strong> Revisar la lista de servicios activos y desactivar aquellos que no sean necesarios.</li>
-            <li><strong>Configuracion de Firewalls:</strong> Restringir el trafico solo a los puertos y protocolos necesarios.</li>
-            <li><strong>Cifrado de Datos:</strong> Implementar cifrado para la transmision de datos sensibles utilizando protocolos seguros.</li>
-            <li><strong>Pruebas de Seguridad:</strong> Programar pruebas de penetracion y auditorias de seguridad regularmente.</li>
-            <li><strong>Documentacion y Procedimientos:</strong> Mantener una documentacion clara y actualizada sobre la configuracion de la red.</li>
-        </ol>
-
-        <script>
-            const ctx = document.getElementById('servicesChart').getContext('2d');
-            const labels = {labels};
-            const data = {
-                labels: labels,
-                datasets: [{
-                    label: 'Ocurrencias de Servicios',
-                    data: {data},
-                    backgroundColor: 'rgba(44, 62, 80, 0.5)',
-                    borderColor: 'rgba(44, 62, 80, 1)',
-                    borderWidth: 1
-                }]
-            };
-            const config = {
-                type: 'bar',
-                data: data,
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            };
-            const servicesChart = new Chart(ctx, config);
-
-            // Grafico de sistemas operativos
-            const osCtx = document.getElementById('osChart').getContext('2d');
-            const osLabels = {osLabels};
-            const osData = {
-                labels: osLabels,
-                datasets: [{
-                    label: 'Cantidad de Hosts por Sistema Operativo',
-                    data: {osData},
-                    backgroundColor: 'rgba(231, 76, 60, 0.5)',
-                    borderColor: 'rgba(231, 76, 60, 1)',
-                    borderWidth: 1
-                }]
-            };
-            const osConfig = {
-                type: 'bar',
-                data: osData,
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            };
-            const osChart = new Chart(osCtx, osConfig);
-        </script>
-
-        <footer>
-        </footer>
-    </body>
-    </html>
-    """
-
-    # Preparar los datos para la grafica de servicios
-    labels = []
-    data = []
-    for (puerto_protocolo, servicio), cantidad in servicios_contador.items():
-        labels.append(f"{servicio} ({puerto_protocolo})")
-        data.append(cantidad)
-
-    # Preparar los datos para la grafica de sistemas operativos
-    os_labels = list(os_counter.keys())
-    os_data = list(os_counter.values())
-
-    # Convertir listas a cadenas para insertar en HTML
-    labels_str = json.dumps(labels)  # Convertir a JSON para que sea un array en JavaScript
-    data_str = json.dumps(data)  # Convertir a JSON para que sea un array en JavaScript
-    os_labels_str = json.dumps(os_labels)  # Convertir a JSON para que sea un array en JavaScript
-    os_data_str = json.dumps(os_data)  # Convertir a JSON para que sea un array en JavaScript
-
-    # Guardar el contenido en un archivo HTML
-    with open('/home/cibersecurity-tool/web_application/templates/reports/report.html', 'w') as html_file:
-        html_file.write(html_content.replace('{labels}', labels_str).replace('{data}', data_str)
-                        .replace('{osLabels}', os_labels_str).replace('{osData}', os_data_str))
-
-    return render_template("reports/report.html")

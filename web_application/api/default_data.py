@@ -2,16 +2,16 @@
 
 def get_default_data_overview_label():
     return {
-        "alive_hosts": 5,
+        "alive_hosts": 38,
         "services": 10,
-        "infrastructure": 3,
-        "risks": 2,
+        "infrastructure": 38,
+        "risks": 4,
     }
 
 def get_default_data_pie_chart_overview():
     return {
-        "findings_labels": ['Vulnerabilities', 'Open Ports', 'Misconfigurations', 'Weak Passwords', 'Others'],
-        "findings_data": [10, 20, 30, 25, 15]
+        "findings_labels": ['Vulnerabilities', 'Open Ports', 'Settings', 'Others'],
+        "findings_data": [10, 20, 30, 25]
     }
 
 def get_findings_list_services():
